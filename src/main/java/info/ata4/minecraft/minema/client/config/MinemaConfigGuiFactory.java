@@ -22,7 +22,22 @@ import net.minecraftforge.fml.client.IModGuiFactory;
 public class MinemaConfigGuiFactory implements IModGuiFactory {
 
 	@Override
-	public void initialize(Minecraft mc) {
+	public void initialize(Minecraft minecraftInstance) {
+	}
+
+	@Override
+	public boolean hasConfigGui() {
+		return true;
+	}
+
+	@Override
+	public GuiScreen createConfigGui(GuiScreen parentScreen) {
+		return new MinemaConfigGui(parentScreen);
+	}
+
+	@Override
+	public Class<? extends GuiScreen> mainConfigGuiClass() {
+		return MinemaConfigGui.class;
 	}
 
 	@Override
@@ -31,15 +46,9 @@ public class MinemaConfigGuiFactory implements IModGuiFactory {
 		return null;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
-	public Class<? extends GuiScreen> mainConfigGuiClass()
-	{
-		return MinemaConfigGui.class;
-	}
-	
-	@Override
-	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element)
-	{
+	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
 		return null;
 	}
 
