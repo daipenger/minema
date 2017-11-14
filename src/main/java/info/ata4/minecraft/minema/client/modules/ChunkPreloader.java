@@ -4,12 +4,14 @@ import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
 
-import info.ata4.minecraft.minema.client.config.MinemaConfig;
+import info.ata4.minecraft.minema.Minema;
+import info.ata4.minecraft.minema.Utils;
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.client.renderer.ViewFrustum;
 import net.minecraft.client.renderer.chunk.ChunkRenderDispatcher;
 import net.minecraft.client.renderer.chunk.CompiledChunk;
 import net.minecraft.client.renderer.chunk.RenderChunk;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -21,10 +23,6 @@ public class ChunkPreloader extends CaptureModule {
 	private Field renderDispatcherField;
 	private Field renderChunkField;
 	private Field renderViewFrustum;
-
-	public ChunkPreloader(MinemaConfig cfg) {
-		super(cfg);
-	}
 
 	@SuppressWarnings("rawtypes")
 	@SubscribeEvent
@@ -50,7 +48,8 @@ public class ChunkPreloader extends CaptureModule {
 				}
 			}
 		} catch (Exception e) {
-			handleWarning(e, "Could not force chunk updates, disable the module and report the error!");
+			Utils.print("Could not do chunk preloading", TextFormatting.RED);
+			Utils.printError(e);
 		}
 	}
 
@@ -74,7 +73,7 @@ public class ChunkPreloader extends CaptureModule {
 		if (renderInfosField == null || renderDispatcherField == null || renderChunkField == null)
 			return;
 
-		if (cfg.forcePreloadChunks.get() && renderViewFrustum != null) {
+		if (Minema.instance.getConfig().forcePreloadChunks.get() && renderViewFrustum != null) {
 			try {
 				ChunkRenderDispatcher chunks = (ChunkRenderDispatcher) renderDispatcherField.get(MC.renderGlobal);
 				ViewFrustum frustum = (ViewFrustum) renderViewFrustum.get(MC.renderGlobal);
@@ -84,9 +83,9 @@ public class ChunkPreloader extends CaptureModule {
 						chunks.updateChunkNow(chunk);
 					}
 				}
-			}
-			catch (Exception e) {
-				handleWarning(e, "Could not preload all chunks in render distance on enable, disable the config option and report the error!");
+			} catch (Exception e) {
+				Utils.print("Could not force preload all chunks", TextFormatting.RED);
+				Utils.printError(e);
 			}
 		}
 
@@ -96,6 +95,11 @@ public class ChunkPreloader extends CaptureModule {
 	@Override
 	protected void doDisable() {
 		MinecraftForge.EVENT_BUS.unregister(this);
+	}
+
+	@Override
+	protected boolean checkEnable() {
+		return Minema.instance.getConfig().preloadChunks.get();
 	}
 
 }

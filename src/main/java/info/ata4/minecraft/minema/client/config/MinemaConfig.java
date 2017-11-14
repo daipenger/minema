@@ -55,7 +55,7 @@ public class MinemaConfig {
 	public final ConfigInteger frameLimit = new ConfigInteger(-1, -1);
 	public final ConfigString capturePath = new ConfigString("movies");
 	public final ConfigBoolean showOverlay = new ConfigBoolean(false);
-	public final ConfigBoolean usePBO = new ConfigBoolean(true);
+	public final ConfigBoolean captureDepth = new ConfigBoolean(false);
 
 	public final ConfigDouble engineSpeed = new ConfigDouble(1.0, 0.01, 100.0);
 	public final ConfigBoolean syncEngine = new ConfigBoolean(true);
@@ -88,7 +88,7 @@ public class MinemaConfig {
 		frameLimit.link(cfg, CAPTURING_CATEGORY, "frameLimit", LANG_KEY);
 		capturePath.link(cfg, CAPTURING_CATEGORY, "capturePath", LANG_KEY);
 		showOverlay.link(cfg, CAPTURING_CATEGORY, "showOverlay", LANG_KEY);
-		usePBO.link(cfg, CAPTURING_CATEGORY, "usePBO", LANG_KEY);
+		captureDepth.link(cfg, CAPTURING_CATEGORY, "captureDepth", LANG_KEY);
 
 		engineSpeed.link(cfg, ENGINE_CATEGORY, "engineSpeed", LANG_KEY);
 		syncEngine.link(cfg, ENGINE_CATEGORY, "syncEngine", LANG_KEY);

@@ -1,36 +1,15 @@
-/*
- ** 2014 July 28
- **
- ** The author disclaims copyright to this source code.  In place of
- ** a legal notice, here is a blessing:
- **    May you do good and not evil.
- **    May you find forgiveness for yourself and forgive others.
- **    May you share freely, never taking more than you give.
- */
 package info.ata4.minecraft.minema.client.modules;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import info.ata4.minecraft.minema.Minema;
-import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import net.minecraft.client.Minecraft;
 
-/**
- *
- * @author Nico Bergemann <barracuda415 at yahoo.de>
- */
 public abstract class CaptureModule {
 
 	protected static final Minecraft MC = Minecraft.getMinecraft();
 	protected static final Logger L = LogManager.getLogger();
-
-	protected final MinemaConfig cfg;
 	private boolean enabled;
-
-	public CaptureModule(MinemaConfig cfg) {
-		this.cfg = cfg;
-	}
 
 	public String getName() {
 		return getClass().getSimpleName();
@@ -40,52 +19,57 @@ public abstract class CaptureModule {
 		return enabled;
 	}
 
-	public synchronized final void enable() {
+	/**
+	 * Enables this module if the current configuration says so
+	 * 
+	 * @throws Exception
+	 */
+	public synchronized final void enable() throws Exception {
 		if (enabled) {
 			return;
 		}
 
-		enabled = true;
+		if (checkEnable()) {
 
-		L.info("Enabling " + getName());
+			enabled = true;
+			L.info("Enabling " + getName());
+			try {
+				doEnable();
+			} catch (Exception e) {
+				throw new Exception("Cannot enable module", e);
+			}
 
-		Minema.EVENT_BUS.register(this);
-
-		try {
-			doEnable();
-		} catch (Exception ex) {
-			handleError(ex, "Cannot enable %s", getName());
-			disable();
 		}
 	}
 
-	public synchronized final void disable() {
+	/**
+	 * Disables this module if it was active. Even though it might throw an
+	 * exception this module must recover into a state that makes it reusable for
+	 * enabling again as if it was freshly instantiated.
+	 * 
+	 * @throws Exception
+	 */
+	public synchronized final void disable() throws Exception {
 		if (!enabled) {
 			return;
 		}
 
-		enabled = false;
-
 		L.info("Disabling " + getName());
-
-		Minema.EVENT_BUS.unregister(this);
-
 		try {
 			doDisable();
-		} catch (Exception ex) {
-			handleError(ex, "Cannot disable %s", getName());
+		} catch (Exception e) {
+			throw new Exception("Cannot disable module", e);
 		}
-	}
 
-	protected void handleWarning(Throwable t, String message, Object... args) {
-		L.warn(String.format(message, args), t);
-	}
-
-	protected void handleError(Throwable t, String message, Object... args) {
-		throw new RuntimeException(String.format(message, args), t);
+		enabled = false;
 	}
 
 	protected abstract void doEnable() throws Exception;
+
+	/**
+	 * @return True if this module should be enabled given the current configuration
+	 */
+	protected abstract boolean checkEnable();
 
 	protected abstract void doDisable() throws Exception;
 }

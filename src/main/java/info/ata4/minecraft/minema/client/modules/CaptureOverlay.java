@@ -9,10 +9,11 @@
  */
 package info.ata4.minecraft.minema.client.modules;
 
-import info.ata4.minecraft.minema.client.config.MinemaConfig;
-import info.ata4.minecraft.minema.client.event.FrameImportEvent;
-import info.ata4.minecraft.minema.client.util.CaptureTime;
 import java.util.ArrayList;
+
+import info.ata4.minecraft.minema.CaptureSession;
+import info.ata4.minecraft.minema.Minema;
+import info.ata4.minecraft.minema.client.util.CaptureTime;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
@@ -25,54 +26,46 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  */
 public class CaptureOverlay extends CaptureModule {
 
-    private CaptureTime time;
+	@SubscribeEvent
+	public void onRenderGameOverlay(RenderGameOverlayEvent.Text evt) {
+		CaptureTime time = CaptureSession.singleton.getTime();
 
-    public CaptureOverlay(MinemaConfig cfg) {
-        super(cfg);
-    }
+		ArrayList<String> left = evt.getLeft();
 
-    @SubscribeEvent
-    public void onFrameImport(FrameImportEvent evt) {
-        time = evt.time;
-    }
+		if (MC.gameSettings.showDebugInfo) {
+			// F3 menu is open -> add spacer
+			left.add("");
+		}
 
-    @SubscribeEvent
-    public void onRenderGameOverlay(RenderGameOverlayEvent.Text evt) {
-        if (time == null) {
-            return;
-        }
+		String frame = String.valueOf(time.getNumFrames());
+		left.add("Frame: " + frame);
 
-        ArrayList<String> left = evt.getLeft();
+		String fps = Minecraft.getDebugFPS() + " fps";
+		left.add("Rate: " + fps);
 
-        if (MC.gameSettings.showDebugInfo) {
-            // F3 menu is open -> add spacer
-            left.add("");
-        }
+		String avg = (int) time.getAverageFPS() + " fps";
+		left.add("Avg.: " + avg);
 
-        String frame = String.valueOf(time.getNumFrames());
-        left.add("Frame: " + frame);
+		String delay = CaptureTime.getTimeUnit(time.getPreviousCaptureTime());
+		left.add("Delay: " + delay);
 
-        String fps = Minecraft.getDebugFPS() + " fps";
-        left.add("Rate: " + fps);
+		left.add("Time R: " + time.getRealTimeString());
+		left.add("Time V: " + time.getVideoTimeString());
+	}
 
-        String avg = (int) time.getAverageFPS() + " fps";
-        left.add("Avg.: " + avg);
+	@Override
+	protected void doEnable() throws Exception {
+		MinecraftForge.EVENT_BUS.register(this);
+	}
 
-        String delay = CaptureTime.getTimeUnit(time.getPreviousCaptureTime());
-        left.add("Delay: " + delay);
+	@Override
+	protected void doDisable() throws Exception {
+		MinecraftForge.EVENT_BUS.unregister(this);
+	}
 
-        left.add("Time R: " + time.getRealTimeString());
-        left.add("Time V: " + time.getVideoTimeString());
-    }
-
-    @Override
-    protected void doEnable() throws Exception {
-        MinecraftForge.EVENT_BUS.register(this);
-    }
-
-    @Override
-    protected void doDisable() throws Exception {
-        MinecraftForge.EVENT_BUS.unregister(this);
-    }
+	@Override
+	protected boolean checkEnable() {
+		return Minema.instance.getConfig().showOverlay.get();
+	}
 
 }

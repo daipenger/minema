@@ -9,6 +9,7 @@
  */
 package info.ata4.minecraft.minema.client.modules.modifiers;
 
+import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import info.ata4.minecraft.minema.client.engine.FixedTimer;
 import info.ata4.minecraft.minema.client.modules.CaptureModule;
@@ -22,15 +23,12 @@ import net.minecraft.util.Timer;
 public class TimerModifier extends CaptureModule {
 
 	private static FixedTimer timer = null;
-
 	private float defaultTps;
-
-	public TimerModifier(MinemaConfig cfg) {
-		super(cfg);
-	}
 
 	@Override
 	protected void doEnable() {
+		MinemaConfig cfg = Minema.instance.getConfig();
+
 		Timer defaultTimer = PrivateAccessor.getMinecraftTimer(MC);
 
 		// check if it's modified already
@@ -50,6 +48,11 @@ public class TimerModifier extends CaptureModule {
 		// set fixed delay timer
 		timer = new FixedTimer(defaultTps, fps, speed);
 		PrivateAccessor.setMinecraftTimer(MC, timer);
+	}
+
+	@Override
+	protected boolean checkEnable() {
+		return Minema.instance.getConfig().syncEngine.get() & MC.isSingleplayer();
 	}
 
 	@Override

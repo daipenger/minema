@@ -7,7 +7,7 @@
  **    May you find forgiveness for yourself and forgive others.
  **    May you share freely, never taking more than you give.
  */
-package info.ata4.minecraft.minema.client.modules.exporters;
+package info.ata4.minecraft.minema.client.modules.video.export;
 
 import static java.nio.file.StandardOpenOption.CREATE;
 import static java.nio.file.StandardOpenOption.WRITE;
@@ -18,8 +18,7 @@ import java.nio.ByteOrder;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 
-import info.ata4.minecraft.minema.client.config.MinemaConfig;
-import info.ata4.minecraft.minema.client.event.FrameExportEvent;
+import info.ata4.minecraft.minema.CaptureSession;
 
 /**
  *
@@ -27,18 +26,14 @@ import info.ata4.minecraft.minema.client.event.FrameExportEvent;
  */
 public class ImageFrameExporter extends FrameExporter {
 
-	public ImageFrameExporter(MinemaConfig cfg) {
-		super(cfg);
-	}
-
 	@Override
-	protected void doExportFrame(FrameExportEvent evt) throws IOException {
-		String fileName = String.format("%06d.tga", evt.time.getNumFrames());
-		Path path = evt.captureDir.resolve(evt.movieName).resolve(fileName);
-		writeImage(path, evt.frame.buffer, evt.frame.width, evt.frame.height);
+	protected void doExportFrame(ByteBuffer buffer) throws Exception {
+		String fileName = String.format("%06d.tga", CaptureSession.singleton.getTime().getNumFrames());
+		Path path = CaptureSession.singleton.getCaptureDir().resolve(movieName).resolve(fileName);
+		writeImage(path, buffer, width, height);
 	}
 
-	private void writeImage(Path path, ByteBuffer bb, int width, int height) throws IOException {
+	private void writeImage(Path path, ByteBuffer buffer, int width, int height) throws IOException {
 		ByteBuffer tgah = ByteBuffer.allocate(18);
 		tgah.order(ByteOrder.LITTLE_ENDIAN);
 
@@ -59,7 +54,9 @@ public class ImageFrameExporter extends FrameExporter {
 
 		try (FileChannel fc = FileChannel.open(path, CREATE, WRITE)) {
 			fc.write(tgah);
-			fc.write(bb);
+			fc.write(buffer);
+			buffer.rewind();
 		}
 	}
+
 }

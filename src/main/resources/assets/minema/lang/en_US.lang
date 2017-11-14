@@ -50,8 +50,8 @@ minema.config.capturePath.tooltip=Path were the captured videos are stored. If n
 minema.config.showOverlay=Show Overlay
 minema.config.showOverlay.tooltip=If enabled, show additional capturing information on the overlay (F3 menu). Note that these information are visible in the video, too.
 
-minema.config.usePBO=Use PBOs
-minema.config.usePBO.tooltip=If enabled, pixel buffer objects are used for asynchronous pixel transfer, which may be faster than the normal synchronous method. However, this might not be compatible with very old GPUs.
+minema.config.captureDepth=Capture depth buffer
+minema.config.captureDepth.tooltip=If enabled, the depth buffer is captured linearly. Warning: Certain tricks are not available for this buffer so this is quite slow!
 
 # config engine
 minema.config.engineSpeed=Engine Speed

@@ -21,12 +21,6 @@ import net.minecraft.server.MinecraftServer;
  */
 public class CommandMinema extends CommandBase {
 
-	private final Minema minema;
-
-	public CommandMinema(Minema minema) {
-		this.minema = minema;
-	}
-
 	@Override
 	public String getName() {
 		return "minema";
@@ -47,10 +41,10 @@ public class CommandMinema extends CommandBase {
 
 		switch (cmd) {
 		case "enable":
-			minema.enable();
+			CaptureSession.singleton.startCapture();
 			break;
 		case "disable":
-			minema.disable();
+			CaptureSession.singleton.stopCapture();
 			break;
 		default:
 			throw new WrongUsageException(getUsage(sender));

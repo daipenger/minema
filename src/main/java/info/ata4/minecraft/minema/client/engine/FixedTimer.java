@@ -21,6 +21,7 @@ public class FixedTimer extends Timer {
 
 	private final float ticksPerSecond;
 	private final float framesPerSecond;
+	private final float timerSpeed;
 
 	/*
 	 * Timespan between frames is 1/framesPerSecond (same as frequency and

@@ -12,6 +12,7 @@ package info.ata4.minecraft.minema.client.config;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraftforge.fml.client.IModGuiFactory;
 
 /**
@@ -25,20 +26,20 @@ public class MinemaConfigGuiFactory implements IModGuiFactory {
 	}
 
 	@Override
-	public Class<MinemaConfigGui> mainConfigGuiClass() {
-		return MinemaConfigGui.class;
-	}
-
-	@Override
 	public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() {
 		// unused/unimplemented by Forge at time this was written
 		return null;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element) {
-		// unused/unimplemented by Forge at time this was written
+	public Class<? extends GuiScreen> mainConfigGuiClass()
+	{
+		return MinemaConfigGui.class;
+	}
+	
+	@Override
+	public RuntimeOptionGuiHandler getHandlerFor(RuntimeOptionCategoryElement element)
+	{
 		return null;
 	}
 

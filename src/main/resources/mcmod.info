@@ -2,10 +2,10 @@
 {
   "modid": "minema",
   "name": "Minema",
-  "description": "This mod allows you to record fluid movies in Minecraft, even if the video recording itself isn't.\nThis is made possible by a temporary modification of the game timer that ensures a constant game time passed between each frame, disabling any synchronization with the actual time.\nIn other words: performance doesn't matter for fluid videos anymore!",
-  "version": "3.3-ShaderSyncEdition",
-  "mcversion": "1.11.2",
-  "url": "http://www.minecraftforum.net/topic/926293-",
+  "description": "This mod allows you to record fluid movies in Minecraft, even if the video recording itself isn't.\nThis is made possible by a temporary modification of the game timer that ensures a constant game time passed between each frame, disabling any synchronization with the actual time.",
+  "version": "3.4-ShaderSync",
+  "mcversion": "1.12.2",
+  "url": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2790594",
   "authorList": ["Barracuda","Gregosteros"]
 }
 ]

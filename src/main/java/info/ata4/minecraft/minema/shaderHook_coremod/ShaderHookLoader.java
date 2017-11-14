@@ -5,7 +5,7 @@ import java.util.Map;
 import info.ata4.minecraft.minema.Minema;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
-@IFMLLoadingPlugin.MCVersion(value = Minema.VERSION)
+@IFMLLoadingPlugin.MCVersion(value = Minema.MCVERSION)
 public final class ShaderHookLoader implements IFMLLoadingPlugin {
 
 	@Override
