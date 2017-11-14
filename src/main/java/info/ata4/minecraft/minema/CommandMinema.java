@@ -22,19 +22,19 @@ import net.minecraft.server.MinecraftServer;
 public class CommandMinema extends CommandBase {
 
 	@Override
-	public String getName() {
+	public String getCommandName() {
 		return "minema";
 	}
 
 	@Override
-	public String getUsage(ICommandSender sender) {
+	public String getCommandUsage(ICommandSender sender) {
 		return "commands.minema.usage";
 	}
 
 	@Override
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if (args.length == 0) {
-			throw new WrongUsageException(getUsage(sender));
+			throw new WrongUsageException(getCommandUsage(sender));
 		}
 
 		String cmd = args[0];
@@ -47,7 +47,7 @@ public class CommandMinema extends CommandBase {
 			CaptureSession.singleton.stopCapture();
 			break;
 		default:
-			throw new WrongUsageException(getUsage(sender));
+			throw new WrongUsageException(getCommandUsage(sender));
 		}
 	}
 

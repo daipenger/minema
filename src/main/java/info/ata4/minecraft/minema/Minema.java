@@ -30,7 +30,7 @@ public class Minema {
 
 	public static final String NAME = "Minema";
 	public static final String MODID = "minema";
-	public static final String MCVERSION = "1.12.2";
+	public static final String MCVERSION = "1.10.2";
 
 	private static final String category = "key.categories.minema";
 	private static final KeyBinding KEY_CAPTURE = new KeyBinding("key.minema.capture", Keyboard.KEY_F4, category);

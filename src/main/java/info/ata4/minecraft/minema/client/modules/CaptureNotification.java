@@ -21,7 +21,7 @@ public class CaptureNotification extends CaptureModule {
 	}
 
 	private void playChickenPlop(float pitch) {
-		MC.world.playSound(MC.player, MC.player.getPosition(), SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.NEUTRAL, 1,
+		MC.theWorld.playSound(MC.thePlayer, MC.thePlayer.getPosition(), SoundEvents.ENTITY_CHICKEN_EGG, SoundCategory.NEUTRAL, 1,
 				pitch);
 	}
 

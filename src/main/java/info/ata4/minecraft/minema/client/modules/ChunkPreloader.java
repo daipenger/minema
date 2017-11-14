@@ -42,7 +42,7 @@ public class ChunkPreloader extends CaptureModule {
 				Object renderInfo = iterator.next();
 				RenderChunk rc = (RenderChunk) renderChunkField.get(renderInfo);
 
-				if (rc.needsUpdate()) {
+				if (rc.isNeedsUpdate()) {
 					renderDispatcher.updateChunkNow(rc);
 					rc.clearNeedsUpdate();
 				}
