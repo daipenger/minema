@@ -101,6 +101,63 @@ public final class ShaderHookInjector implements IClassTransformer {
 
 		}
 
+		if ("net.minecraft.entity.Entity".equals(deobfuscated)) {
+
+			final ClassReader classReader = new ClassReader(bytes);
+			final ClassNode classNode = new ClassNode();
+			classReader.accept(classNode, 0);
+
+			for (final MethodNode m : classNode.methods) {
+
+				if ("c".equals(m.name) && "(FF)V".equals(m.desc)) {
+
+					int i = 0;
+					ListIterator<AbstractInsnNode> iterator = m.instructions.iterator();
+					while (iterator.hasNext()) {
+						AbstractInsnNode currentNode = iterator.next();
+						if (i != 37) {
+							i++;
+							continue;
+						}
+						if (currentNode.getOpcode() != Opcodes.PUTFIELD) {
+							System.out.println("NOT PUTFIELD!" + currentNode.getOpcode());
+						}
+						AbstractInsnNode a1 = iterator.next();
+						System.out.println(a1.getOpcode());
+						iterator.remove();
+						AbstractInsnNode a2 = iterator.next();
+						System.out.println(a2.getOpcode());
+						iterator.remove();
+						AbstractInsnNode a3 = iterator.next();
+						System.out.println(a3.getOpcode());
+						iterator.remove();
+						AbstractInsnNode a4 = iterator.next();
+						System.out.println(a4.getOpcode());
+						iterator.remove();
+						AbstractInsnNode a5 = iterator.next();
+						System.out.println(a5.getOpcode());
+						iterator.remove();
+						AbstractInsnNode a6 = iterator.next();
+						System.out.println(a6.getOpcode());
+						iterator.remove();
+						AbstractInsnNode a7 = iterator.next();
+						System.out.println(a7.getOpcode());
+						iterator.remove();
+						break;
+					}
+
+					break;
+
+				}
+
+			}
+
+			final ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
+			classNode.accept(classWriter);
+			return classWriter.toByteArray();
+
+		}
+
 		return bytes;
 	}
 
