@@ -7,7 +7,6 @@ import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.LdcInsnNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
@@ -22,18 +21,12 @@ public final class ShaderHookInjector implements IClassTransformer {
 	// Do not use methods.csv etc. because those are the Forge mappings (which
 	// is only relevant for runtime reflection)
 
-	private static final String deobfuscatedClass = "net.minecraft.client.renderer.EntityRenderer";
-	// private static final String obfuscatedClass = "buq";
-
-	private static final String deobfuscatedMethod = "renderWorld";
-	private static final String obfuscatedMethod = "b";
-
 	@Override
 	public byte[] transform(final String obfuscated, final String deobfuscated, final byte[] bytes) {
 		// "Deobfuscated" is always passed as a deobfuscated argument, but the
 		// "obfuscated" argument may be deobfuscated or obfuscated
 
-		if (deobfuscatedClass.equals(deobfuscated)) {
+		if ("net.minecraft.client.renderer.EntityRenderer".equals(deobfuscated)) {
 
 			final ClassReader classReader = new ClassReader(bytes);
 			final ClassNode classNode = new ClassNode();
@@ -41,7 +34,7 @@ public final class ShaderHookInjector implements IClassTransformer {
 
 			boolean isInAlreadyDeobfuscatedState = obfuscated.equals(deobfuscated);
 
-			final String method = isInAlreadyDeobfuscatedState ? deobfuscatedMethod : obfuscatedMethod;
+			final String method = isInAlreadyDeobfuscatedState ? "renderWorld" : "b";
 
 			for (final MethodNode m : classNode.methods) {
 
@@ -65,29 +58,9 @@ public final class ShaderHookInjector implements IClassTransformer {
 						AbstractInsnNode currentNode = iterator.next();
 						if (doesMatchStaticCall(currentNode, calledClass, calledMethod, "()V")) {
 							iterator.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
-									"info/ata4/minecraft/minema/client/modules/ShaderSync",
-									"setFrameTimeCounter", "()V", false));
+									"info/ata4/minecraft/minema/client/modules/ShaderSync", "setFrameTimeCounter",
+									"()V", false));
 							break;
-						}
-					}
-
-				} else if (m.name.equals("a") && m.desc.equals("(IFJ)V")) {
-
-					ListIterator<AbstractInsnNode> iterator = m.instructions.iterator();
-
-					while (iterator.hasNext()) {
-						AbstractInsnNode currentNode = iterator.next();
-						if (currentNode.getOpcode() == Opcodes.LDC) {
-
-							LdcInsnNode ldc = (LdcInsnNode) currentNode;
-							if ("hand".equals(ldc.cst)) {
-
-								currentNode = iterator.next();
-								iterator.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
-										"info/ata4/minecraft/minema/CaptureSession", "ASMmidRender", "()V", false));
-
-								break;
-							}
 						}
 					}
 

@@ -3,6 +3,7 @@ package info.ata4.minecraft.minema;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import info.ata4.minecraft.minema.client.event.EndRenderEvent;
@@ -21,6 +22,7 @@ import info.ata4.minecraft.minema.client.modules.video.VideoHandler;
 import info.ata4.minecraft.minema.client.util.CaptureTime;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -37,15 +39,14 @@ public class CaptureSession {
 	private Path captureDir;
 	private CaptureTime time;
 	private int frameLimit;
-	private boolean isEnabled;
+	private AtomicBoolean isEnabled = new AtomicBoolean(false);
 
 	private CaptureSession() {
 	}
 
 	public boolean startCapture() {
-		if (isEnabled)
+		if (!isEnabled.compareAndSet(false, true))
 			return false;
-		isEnabled = true;
 
 		try {
 			Minecraft MC = Minecraft.getMinecraft();
@@ -85,7 +86,7 @@ public class CaptureSession {
 	}
 
 	public boolean stopCapture() {
-		if (!isEnabled)
+		if (!isEnabled.compareAndSet(true, false))
 			return false;
 
 		MinemaEventbus.reset();
@@ -101,7 +102,6 @@ public class CaptureSession {
 			}
 		}
 
-		isEnabled = false;
 		return true;
 	}
 
@@ -114,7 +114,7 @@ public class CaptureSession {
 	}
 
 	private <X> void execFrameEvent(MinemaEventbus<X> bus, X event) {
-		if (isEnabled) {
+		if (isEnabled.get()) {
 
 			if (frameLimit > 0 && time.getNumFrames() >= frameLimit) {
 				stopCapture();
@@ -132,17 +132,15 @@ public class CaptureSession {
 	}
 
 	@SubscribeEvent
+	public void onRenderWorldLast(RenderWorldLastEvent e) {
+		execFrameEvent(MinemaEventbus.midRenderBUS, new MidRenderEvent(this));
+	}
+
+	@SubscribeEvent
 	public void onRenderTick(RenderTickEvent e) {
 		if (e.phase == Phase.END) {
 			execFrameEvent(MinemaEventbus.endRenderBUS, new EndRenderEvent(this));
 		}
-	}
-
-	/**
-	 * Called by ASM hook
-	 */
-	public static void ASMmidRender() {
-		singleton.execFrameEvent(MinemaEventbus.midRenderBUS, new MidRenderEvent(singleton));
 	}
 
 }

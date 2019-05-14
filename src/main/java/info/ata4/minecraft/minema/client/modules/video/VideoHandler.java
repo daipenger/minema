@@ -77,8 +77,8 @@ public class VideoHandler extends CaptureModule {
 		if (depthExport != null)
 			depthExport.enable(depthName, startWidth, startHeight);
 
-		MinemaEventbus.midRenderBUS.registerListener((e) -> onRenderMid(e));
-		MinemaEventbus.endRenderBUS.registerListener((e) -> onRenderEnd(e));
+		MinemaEventbus.midRenderBUS.registerListener(this::onRenderMid);
+		MinemaEventbus.endRenderBUS.registerListener(this::onRenderEnd);
 	}
 
 	@Override
@@ -127,7 +127,15 @@ public class VideoHandler extends CaptureModule {
 
 		if (!recordGui) {
 			exportColor();
+			e.session.getTime().nextFrame();
+		}
+	}
+	
+	private void onRenderEnd(EndRenderEvent e) throws Exception {
+		checkDimensions();
 
+		if (recordGui) {
+			exportColor();
 			e.session.getTime().nextFrame();
 		}
 	}
@@ -143,17 +151,6 @@ public class VideoHandler extends CaptureModule {
 		final float near = 0.05f;
 		final float far = Minecraft.getMinecraft().gameSettings.renderDistanceChunks << 4;
 		return 0.1f / (far + near - (2 * z - 1) * (far - near));
-	}
-
-	private void onRenderEnd(EndRenderEvent e) throws Exception {
-		checkDimensions();
-
-		if (recordGui) {
-			exportColor();
-
-			e.session.getTime().nextFrame();
-		}
-
 	}
 
 	private void checkDimensions() {
