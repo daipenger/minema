@@ -9,10 +9,14 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.client.IModGuiFactory;
-import net.minecraftforge.fml.common.Loader;
 import org.lwjgl.input.Keyboard;
 
+import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class GuiCaptureConfiguration extends GuiScreen {
 
@@ -24,7 +28,10 @@ public class GuiCaptureConfiguration extends GuiScreen {
     public GuiTextField frameLimit;
 
     public GuiButton showConfig;
+    public GuiButton showRecordings;
     public GuiButton record;
+
+    private boolean movieExists;
 
     @Override
     public void initGui() {
@@ -32,11 +39,11 @@ public class GuiCaptureConfiguration extends GuiScreen {
 
         int width = 300;
         int x = (this.width - width) / 2;
-        int y = 50;
+        int y = 60;
 
         this.name = new GuiTextField(0, this.fontRenderer, x + 1, y + 1, 298, 18);
 
-        y += 50;
+        y += 60;
 
         this.videoWidth = new GuiTextField(1, this.fontRenderer, x + 1, y + 1, 143, 18);
         this.videoHeight = new GuiTextField(2, this.fontRenderer, x + 155 + 1, y + 1, 143, 18);
@@ -48,10 +55,12 @@ public class GuiCaptureConfiguration extends GuiScreen {
 
         y = this.height - 40;
 
-        this.showConfig = new GuiButton(5, x, y, 145, 20, "Open Mod Options");
-        this.record = new GuiButton(5, x + 155, y, 145, 20, "Record...");
+        this.showConfig = new GuiButton(5, x, y, 95, 20, "Mod Options");
+        this.showRecordings = new GuiButton(6, x + 100, y, 100, 20, "Movies Folder");
+        this.record = new GuiButton(7, x + 205, y, 95, 20, "Record...");
 
         this.buttonList.add(this.showConfig);
+        this.buttonList.add(this.showRecordings);
         this.buttonList.add(this.record);
 
         /* Fill data */
@@ -65,12 +74,24 @@ public class GuiCaptureConfiguration extends GuiScreen {
 
     @Override
     protected void actionPerformed(GuiButton button) throws IOException {
+        MinemaConfig cfg = Minema.instance.getConfig();
+
         if (button == this.showConfig) {
             IModGuiFactory guiFactory = FMLClientHandler.instance().getGuiFactoryFor(Minema.container);
             GuiScreen newScreen = guiFactory.createConfigGui(this);
+
             this.mc.displayGuiScreen(newScreen);
+        } else if (button == this.showRecordings) {
+            try {
+                URI uri = new File(cfg.capturePath.get()).toURI();
+                Class<?> clazz = Class.forName("java.awt.Desktop");
+                Object object = clazz.getMethod("getDesktop", new Class[0]).invoke(null);
+
+                clazz.getMethod("browse", new Class[] {URI.class}).invoke(object, new Object[] {uri});
+            } catch (Throwable t) {}
         } else if (button == this.record) {
-            MinemaConfig cfg = Minema.instance.getConfig();
+            if (this.movieExists)
+                return;
 
             VideoHandler.customName = this.name.getText();
             cfg.frameWidth.set(this.parseInt(this.videoWidth.getText(), cfg.frameWidth.get()));
@@ -83,9 +104,7 @@ public class GuiCaptureConfiguration extends GuiScreen {
             this.mc.displayGuiScreen(null);
 
             if (this.mc.currentScreen == null)
-            {
                 this.mc.setIngameFocus();
-            }
         }
     }
 
@@ -118,9 +137,8 @@ public class GuiCaptureConfiguration extends GuiScreen {
 
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
-        if (keyCode == Keyboard.KEY_RETURN) {
+        if (keyCode == Keyboard.KEY_RETURN && !this.movieExists)
             this.actionPerformed(this.record);
-        }
 
         super.keyTyped(typedChar, keyCode);
 
@@ -129,6 +147,16 @@ public class GuiCaptureConfiguration extends GuiScreen {
         this.videoHeight.textboxKeyTyped(typedChar, keyCode);
         this.frameRate.textboxKeyTyped(typedChar, keyCode);
         this.frameLimit.textboxKeyTyped(typedChar, keyCode);
+
+        this.updateMoviesExist();
+    }
+
+    private void updateMoviesExist() {
+        MinemaConfig cfg = Minema.instance.getConfig();
+        Path folder = Paths.get(cfg.capturePath.get());
+        String filename = this.name.getText();
+
+        this.movieExists = !filename.isEmpty() && (Files.exists(folder.resolve(filename)) || Files.exists(folder.resolve(filename + ".mp4")));
     }
 
     @Override
@@ -142,6 +170,9 @@ public class GuiCaptureConfiguration extends GuiScreen {
         this.fontRenderer.drawStringWithShadow("Height", this.videoHeight.x, this.videoHeight.y - 12, 0xffffff);
         this.fontRenderer.drawStringWithShadow("Frame rate (FPS)", this.frameRate.x, this.frameRate.y - 12, 0xffffff);
         this.fontRenderer.drawStringWithShadow("Frame limit", this.frameLimit.x, this.frameLimit.y - 12, 0xffffff);
+
+        if (this.movieExists)
+            this.fontRenderer.drawStringWithShadow("A file with such name exists already, pick another...", this.name.x, this.name.y + 22, 0xff3355);
 
         this.name.drawTextBox();
         this.videoWidth.drawTextBox();
