@@ -42,6 +42,10 @@ public class CaptureSession {
 	private CaptureSession() {
 	}
 
+	public boolean isEnabled() {
+		return isEnabled;
+	}
+
 	public boolean startCapture() {
 		if (isEnabled)
 			return false;

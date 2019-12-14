@@ -23,6 +23,8 @@ import net.minecraft.client.renderer.OpenGlHelper;
 
 public class VideoHandler extends CaptureModule {
 
+	public static String customName;
+
 	private ColorbufferReader colorReader;
 	private FrameExporter colorExport;
 
@@ -42,7 +44,7 @@ public class VideoHandler extends CaptureModule {
 
 		this.startWidth = MC.displayWidth;
 		this.startHeight = MC.displayHeight;
-		this.colorName = new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(new Date());
+		this.colorName = customName == null && !customName.isEmpty() ? new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(new Date()) : customName;
 		this.depthName = colorName.concat("depthBuffer");
 		this.recordGui = cfg.recordGui.get();
 
@@ -51,6 +53,7 @@ public class VideoHandler extends CaptureModule {
 		boolean usePipe = cfg.useVideoEncoder.get();
 		boolean recordDepth = cfg.captureDepth.get();
 
+		customName = null;
 		colorReader = new ColorbufferReader(startWidth, startHeight, usePBO, useFBO);
 		colorExport = usePipe ? new PipeFrameExporter() : new ImageFrameExporter();
 

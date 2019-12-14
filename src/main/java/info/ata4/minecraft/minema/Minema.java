@@ -1,5 +1,11 @@
 package info.ata4.minecraft.minema;
 
+import info.ata4.minecraft.minema.client.gui.GuiCaptureConfiguration;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import org.lwjgl.input.Keyboard;
 
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
@@ -37,12 +43,14 @@ public class Minema {
 
 	@Instance(MODID)
 	public static Minema instance;
+	public static ModContainer container;
 
 	private MinemaConfig config;
 
 	@EventHandler
 	public void onPreInit(FMLPreInitializationEvent e) {
 		config = new MinemaConfig(new Configuration(e.getSuggestedConfigurationFile()));
+		container = Loader.instance().activeModContainer();
 	}
 
 	@EventHandler
@@ -64,6 +72,12 @@ public class Minema {
 	@SubscribeEvent
 	public void onKeyInput(KeyInputEvent event) {
 		if (KEY_CAPTURE.isPressed())
+			if (GuiScreen.isShiftKeyDown() && !CaptureSession.singleton.isEnabled()) {
+				Minecraft.getMinecraft().displayGuiScreen(new GuiCaptureConfiguration());
+
+				return;
+			}
+
 			if (!CaptureSession.singleton.startCapture())
 				CaptureSession.singleton.stopCapture();
 	}
