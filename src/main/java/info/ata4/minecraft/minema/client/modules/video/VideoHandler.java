@@ -44,7 +44,7 @@ public class VideoHandler extends CaptureModule {
 
 		this.startWidth = MC.displayWidth;
 		this.startHeight = MC.displayHeight;
-		this.colorName = customName == null && !customName.isEmpty() ? new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(new Date()) : customName;
+		this.colorName = customName == null || customName.isEmpty() ? new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(new Date()) : customName;
 		this.depthName = colorName.concat("depthBuffer");
 		this.recordGui = cfg.recordGui.get();
 

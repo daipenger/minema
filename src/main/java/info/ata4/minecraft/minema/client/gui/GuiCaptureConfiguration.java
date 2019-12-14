@@ -151,4 +151,5 @@ public class GuiCaptureConfiguration extends GuiScreen {
 
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
+
 }
