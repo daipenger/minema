@@ -1,7 +1,7 @@
 # messages
 minema.error.warning=警告!
 minema.error.tick_sync=Tick 同步不可用! 請在單人模式下錄制!
-minema.error.chunk_loading=區塊瞬間加載只有在單人模式下才能發揮其最大性能!
+minema.error.chunk_loading=區塊瞬間加載僅在單人模式下才能發揮其最大性能!
 minema.error.chunk_preload=無法進行區塊預加載
 minema.error.stacktrace=參見日誌以查看完整記錄
 minema.error.cause=Cause:
@@ -9,10 +9,10 @@ minema.error.cause=Cause:
 minema.error.label=Recording error:
 minema.error.enable_module=無法啟用模塊
 minema.error.disable_module=無法停用模塊
-minema.error.capture_path_permissions=因缺乏權限，無法創建捕獲路徑 '%s' ! 請指定另壹個捕獲路徑!
+minema.error.capture_path_permissions=因缺乏權限, 無法創建捕獲路徑 '%s' ! 請指定另壹個捕獲路徑!
 minema.error.capture_path_exists=捕獲路徑 '%s' 是已經存在的文件! 請指定另壹個捕獲路徑
 minema.error.ffmpeg_not_exists=在指定路徑 '%s' 下找不到 ffmpeg! 請指定 ffmpeg 的正確路徑!
-minema.error.ffmpeg_error=可能是由於沒有權限，無法導出視頻到 '%s'，或是指定編碼器路徑 '%s' 無法執行 (沒有權限執行此文件) 或是此文件不是 ffmpeg! 請指定其他捕獲或編碼器 (ffmpeg) 路徑!"
+minema.error.ffmpeg_error=可能是由於沒有權限, 無法導出視頻到 '%s', 或是指定編碼器路徑 '%s' 無法執行 (沒有權限執行此文件) 或是此文件不是 ffmpeg! 請指定其他捕獲或編碼器 (ffmpeg) 路徑!"
 minema.error.export_frame=無法輸出幀 %s
 minema.error.size_change=顯示大小發生改變! 當前大小: %dx%d 起始大小: %dx%d
 
@@ -28,11 +28,12 @@ minema.gui.fps=幀率 (FPS)
 minema.gui.limit=幀數上限
 minema.gui.speed=引擎速率
 minema.gui.speed.tooltip=例: 1 = 正常, 2 (2/1) = 2x 更快, 0.5 (1/2) = 2x 更慢
-minema.gui.file_exists=已存在相同名稱的文件，請選擇其他名稱...
+minema.gui.file_exists=已存在相同名稱的文件, 請選擇其他名稱...
 
 # keys
 key.categories.minema=Minema
 key.minema.capture=開始/停止 錄制
+key.minema.freeze=凍結區塊
 
 # commands
 commands.minema.usage=/minema <enable|disable>
@@ -49,53 +50,72 @@ minema.config.engine.tooltip=錄制時應用的高級引擎覆蓋設置。
 
 # config encoding
 minema.config.useVideoEncoder=啟用視頻編碼
-minema.config.useVideoEncoder.tooltip=啟用後，將應用視頻編碼程序，通過標準輸入通道從 Minema 接收未壓縮的 BGR24 幀信息。
+minema.config.useVideoEncoder.tooltip=啟用後, 將應用視頻編碼程序, 通過標準輸入通道從 Minema 接收未壓縮的 BGR24 幀信息。
 
 minema.config.videoEncoderPath=編碼器路徑
-minema.config.videoEncoderPath.tooltip=視頻編碼可執行文件的路徑。編碼器的輸出的目錄是自動生成的影片文件夾。如果視頻編碼器被禁用，此項將會被忽略。
+minema.config.videoEncoderPath.tooltip=視頻編碼可執行文件的路徑。編碼器的輸出的目錄是自動生成的影片文件夾。如果視頻編碼器被禁用, 此項將會被忽略。
 
 minema.config.videoEncoderParams=編碼器參數
-minema.config.videoEncoderParams.tooltip=視頻編碼程序的參數。占位符：%%WIDTH%% - 幀寬度，%%HEIGHT%% - 幀高度，%%FPS%% - 幀率。%%NAME%% - 要使用的視頻文件名。如果視頻編碼器被禁用，此項將會被忽略。
+minema.config.videoEncoderParams.tooltip=視頻編碼程序的參數。占位符：%%WIDTH%% - 幀寬度, %%HEIGHT%% - 幀高度, %%FPS%% - 幀率。%%NAME%% - 要使用的視頻文件名。如果視頻編碼器被禁用, 此項將會被忽略。
+
+minema.config.videoEncoderParamsAlpha=編碼器參數 (alpha)
+minema.config.videoEncoderParamsAlpha.tooltip=啟用“使用 Alpha 通道”選項時的視頻編碼程序的參數。占位符與前者相同。對於 PNG 序列, 妳可以使用 "-f rawvideo -pix_fmt rgb32 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip %NAME%_%d.png"。
 
 minema.config.snapResolution=對齊分辨率
-minema.config.snapResolution.tooltip=如果必要的話，請將錄制分辨率切換到下壹個較低的分辨率，這樣寬度和高度就可以被這個模數整除。FFMpeg 只需要 mod2，其他的編碼器可能要更高壹些。
+minema.config.snapResolution.tooltip=如果必要的話, 請將錄制分辨率切換到下壹個較低的分辨率, 這樣寬度和高度就可以被該模數整除。FFMpeg 只需要 mod2, 其他的編碼器可能要更高壹些。
+
+minema.config.enableEncoderLogging=編碼器日誌
+minema.config.enableEncoderLogging.tooltip=該選項通過將 ffmpeg 編碼進程的輸出寫入 *.log 文件來實現 ffmpeg 編碼進程的記錄。禁用該選項將不會在錄制時創建日誌文件。
 
 # config capturing
 minema.config.frameWidth=幀寬度
-minema.config.frameWidth.tooltip=每次捕獲幀的寬度，單位為像素。設置為 0 則會應用當前窗口/屏幕的寬度。非零值需要幀緩沖區支持，並與您的 GPU 的最大紋理分辨率綁定。
+minema.config.frameWidth.tooltip=每次捕獲幀的寬度, 單位為像素。設置為 0 則會應用當前窗口/屏幕的寬度。非零值需要幀緩沖區支持, 並與您的 GPU 的最大紋理分辨率綁定。
 
 minema.config.frameHeight=幀高度
-minema.config.frameHeight.tooltip=每次捕獲幀的高度，單位為像素。設置為 0 則會應用當前窗口/屏幕的寬度。非零值需要幀緩沖區支持，並與您的 GPU 的最大紋理分辨率綁定。
+minema.config.frameHeight.tooltip=每次捕獲幀的高度, 單位為像素。設置為 0 則會應用當前窗口/屏幕的寬度。非零值需要幀緩沖區支持, 並與您的 GPU 的最大紋理分辨率綁定。
 
 minema.config.frameRate=幀率
-minema.config.frameRate.tooltip=錄制幀率，設置遊戲內每秒記錄的幀數。允許使用小數，例如：24p NTSC 的 23.976。由於 Minecraft 是以每秒 20 次為單位運行的，建議使用 20 的倍數的幀率來獲得最佳的流暢度。
+minema.config.frameRate.tooltip=錄制幀率, 設置遊戲內每秒記錄的幀數。允許使用小數, 例如：24p NTSC 的 23.976。由於 Minecraft 是以每秒 20 次為單位運行的, 建議使用 20 的倍數的幀率來獲得最佳的流暢度。
 
 minema.config.frameLimit=幀數上限
 minema.config.frameLimit.tooltip=在自動停止前錄制要捕獲的幀數。-1 表示沒有限制。
 
 minema.config.capturePath=捕獲路徑
-minema.config.capturePath.tooltip=存儲捕獲視頻的路徑。如果不使用絕對路徑，則該路徑是 Minecraft 運行目錄的相對路徑。
+minema.config.capturePath.tooltip=存儲捕獲視頻的路徑。如果不使用絕對路徑, 則該路徑是 Minecraft 運行目錄的相對路徑。
 
 minema.config.showOverlay=顯示覆蓋層
-minema.config.showOverlay.tooltip=啟用後，則會在覆蓋層 (F3 菜單) 中顯示附加的捕獲信息。請註意，這些信息在視頻中也可以看到。
+minema.config.showOverlay.tooltip=啟用後, 則會在覆蓋層 (F3 菜單) 中顯示附加的捕獲信息。請註意, 這些信息在視頻中也可以看到。
 
 minema.config.captureDepth=捕獲深度緩沖器信息
-minema.config.captureDepth.tooltip=啟用後，深度緩沖器的信息將被線性捕獲 (可獲得深度圖/視頻)。警告：某些情況下不適用於此緩沖器，因此會嚴重拖慢速度!
+minema.config.captureDepth.tooltip=啟用後, 深度緩沖器的信息將被線性捕獲 (可獲得深度圖/視頻)。警告：某些情況下不適用於此緩沖器, 因此會嚴重拖慢速度!
+
+minema.config.captureDepthDistance=捕獲深度距離
+minema.config.captureDepthDistance.tooltip=若大於 0, 深度捕獲將根據這壹最大值而不是 Minecraft 的渲染距離來調整深度。
 
 minema.config.recordGui=錄制 GUI
-minema.config.recordGui.tooltip=禁用後，GUI (物品欄、手、準心等) 將不會被錄制。
+minema.config.recordGui.tooltip=禁用後, GUI (物品欄、手、準心等) 將不會被錄制。
 
 minema.config.aaFastRenderFix=抗鋸齒與快速渲染修復
-minema.config.aaFastRenderFix.tooltip=當啟用 OptiFine 的反鋸齒或快速渲染功能並與自定義分辨率壹起使用時，可以修復損壞的錄制文件。此項是通過調整整個應用程序窗口的大小來作為壹種解決方案的。
+minema.config.aaFastRenderFix.tooltip=當啟用 OptiFine 的反鋸齒或快速渲染功能並與自定義分辨率壹起使用時, 可以修復損壞的錄制文件。此項是通過調整整個應用程序窗口的大小來作為壹種解決方案的。
+
+minema.config.useAlpha=使用 Alpha 通道
+minema.config.useAlpha.tooltip=啟用後, Alpha 通道也會被發送到 ffmpeg。為了實現該效果, 妳需要使用壹些模組的功能, 比如 Blockbuster 的 0% 不透明度的色度天空功能 (或是圖像、自定義模型偽裝的色鍵選項)。該功能在大多數情況下不適用於光影包, 因為它們忽略了傳遞 alpha 值 (個別光影包需通過編輯實現)。
+
+minema.config.heldFrames=保持幀
+minema.config.heldFrames.tooltip=該選項允許您在特定時間內保持壹個渲染幀進行錄制。這只對於像 PTGI 這樣的光線追蹤光影包有用, 因為它們的光照需要幾個渲染幀後才能刷新
+
+minema.config.useAlphaScreenshot=截圖保存 Alpha 通道
+minema.config.useAlphaScreenshot.tooltip=在按 F2 截圖時啟用 Alpha 通道
 
 # config engine
 minema.config.engineSpeed=引擎速率
-minema.config.engineSpeed.tooltip=遊戲時鐘的速率修改器。默認值為 1.0，相當於每秒 20 Tick。更低或更高的值會加快或減慢遊戲時間。例如，2.5，結果是正常速度的二分之壹。對於慢動作或延時拍攝很有用。如果不啟用捕獲同步，此項將會被忽略。
+minema.config.engineSpeed.tooltip=遊戲時鐘的速率修改器。默認值為 1.0, 相當於每秒 20 Tick。更低或更高的值會加快或減慢遊戲時間。例如, 2.5, 結果是正常速度的二分之壹。對於慢動作或延時拍攝很有用。如果不啟用捕獲同步, 此項將會被忽略。
 
 minema.config.syncEngine=同步
-minema.config.syncEngine.tooltip=啟用後，本地服務器和客戶端會以視頻捕獲幀率同步運行。這有效地將 Minecraft 變成了壹個離線渲染器，並允許渲染和捕捉極其復雜的場景。本 ShaderSync 版本還同步了 karyonix 的 Shader mod (同時兼容 Optifine)。僅適用於本地世界!
+minema.config.syncEngine.tooltip=啟用後, 本地服務器和客戶端會以視頻捕獲幀率同步運行。這有效地將 Minecraft 變成了壹個離線渲染器, 並允許渲染和捕捉極其復雜的場景。本 ShaderSync 版本還同步了 karyonix 的 Shader mod (同時兼容 Optifine)。僅適用於本地世界!
+
 minema.config.preloadChunks=區塊預加載
-minema.config.preloadChunks.tooltip=啟用後，Minema 會在錄制過程中大幅提升區塊加載速度。此項僅在本地世界才會起效!
+minema.config.preloadChunks.tooltip=啟用後, Minema 會在錄制過程中大幅提升區塊加載速度。此項僅在本地世界才會起效!
 
 minema.config.forcePreloadChunks=強制區塊預加載
-minema.config.forcePreloadChunks.tooltip=在啟用了區塊預加載，同時也啟用本功能，那麽渲染距離內的所有區塊都會被預加載。此項僅在本地世界才會起效!
+minema.config.forcePreloadChunks.tooltip=在啟用了區塊預加載, 同時也啟用本功能, 那麽渲染距離內的所有區塊都會被預加載。此項僅在本地世界才會起效!
