@@ -1,7 +1,7 @@
 # messages
 minema.error.warning=警告!
 minema.error.tick_sync=Tick 同步不可用! 请在单人模式下录制!
-minema.error.chunk_loading=区块瞬间加载只有在单人模式下才能发挥其最大性能!
+minema.error.chunk_loading=区块瞬间加载仅在单人模式下才能发挥其最大性能!
 minema.error.chunk_preload=无法进行区块预加载
 minema.error.stacktrace=参见日志以查看完整记录
 minema.error.cause=Cause:
@@ -33,6 +33,7 @@ minema.gui.file_exists=已存在相同名称的文件，请选择其他名称...
 # keys
 key.categories.minema=Minema
 key.minema.capture=开始/停止 录制
+key.minema.freeze=冻结区块
 
 # commands
 commands.minema.usage=/minema <enable|disable>
@@ -57,8 +58,14 @@ minema.config.videoEncoderPath.tooltip=视频编码可执行文件的路径。�
 minema.config.videoEncoderParams=编码器参数
 minema.config.videoEncoderParams.tooltip=视频编码程序的参数。占位符：%%WIDTH%% - 帧宽度，%%HEIGHT%% - 帧高度，%%FPS%% - 帧率。%%NAME%% - 要使用的视频文件名。如果视频编码器被禁用，此项将会被忽略。
 
+minema.config.videoEncoderParamsAlpha=编码器参数 (alpha)
+minema.config.videoEncoderParamsAlpha.tooltip=启用“使用 Alpha 通道”选项时的视频编码程序的参数。占位符与前者相同。对于 PNG 序列, 你可以使用 "-f rawvideo -pix_fmt rgb32 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip %NAME%_%d.png"。
+
 minema.config.snapResolution=对齐分辨率
 minema.config.snapResolution.tooltip=如果必要的话，请将录制分辨率切换到下一个较低的分辨率，这样宽度和高度就可以被这个模数整除。FFMpeg 只需要 mod2，其他的编码器可能要更高一些。
+
+minema.config.enableEncoderLogging=编码器日志
+minema.config.enableEncoderLogging.tooltip=该选项通过将 ffmpeg 编码进程的输出写入 *.log 文件来实现 ffmpeg 编码进程的记录。禁用该选项将不会在录制时创建日志文件。
 
 # config capturing
 minema.config.frameWidth=帧宽度
@@ -82,11 +89,23 @@ minema.config.showOverlay.tooltip=启用后，则会在覆盖层 (F3 菜单) 中
 minema.config.captureDepth=捕获深度缓冲器信息
 minema.config.captureDepth.tooltip=启用后，深度缓冲器的信息将被线性捕获 (可获得深度图/视频)。警告：某些情况下不适用于此缓冲器，因此会严重拖慢速度!
 
+minema.config.captureDepthDistance=捕获深度距离
+minema.config.captureDepthDistance.tooltip=若大于 0, 深度捕获将根据这一最大值而不是 Minecraft 的渲染距离来调整深度。
+
 minema.config.recordGui=录制 GUI
 minema.config.recordGui.tooltip=禁用后，GUI (物品栏、手、准心等) 将不会被录制。
 
 minema.config.aaFastRenderFix=抗锯齿与快速渲染修复
 minema.config.aaFastRenderFix.tooltip=当启用 OptiFine 的反锯齿或快速渲染功能并与自定义分辨率一起使用时，可以修复损坏的录制文件。此项是通过调整整个应用程序窗口的大小来作为一种解决方案的。
+
+minema.config.useAlpha=使用 Alpha 通道
+minema.config.useAlpha.tooltip=启用后, alpha通道也会被发送到 ffmpeg。为了实现该效果, 你需要使用一些模组的功能, 比如 Blockbuster 的 0% 不透明度的色度天空功能 (或是图像、自定义模型伪装的色键选项)。该功能在大多数情况下不适用于光影包, 因为它们忽略了传递 alpha 值 (个别光影包需通过编辑实现)。
+
+minema.config.heldFrames=保持帧
+minema.config.heldFrames.tooltip=该选项允许您在特定时间内保持一个渲染帧进行录制。这只对于像 PTGI 这样的光线追踪光影包有用, 因为它们的光照需要几个渲染帧后才能刷新
+
+minema.config.useAlphaScreenshot=截图保存 Alpha 通道
+minema.config.useAlphaScreenshot.tooltip=在按 F2 截图时启用 Alpha 通道
 
 # config engine
 minema.config.engineSpeed=引擎速率
@@ -94,6 +113,7 @@ minema.config.engineSpeed.tooltip=游戏时钟的速率修改器。默认值为 
 
 minema.config.syncEngine=同步
 minema.config.syncEngine.tooltip=启用后，本地服务器和客户端会以视频捕获帧率同步运行。这有效地将 Minecraft 变成了一个离线渲染器，并允许渲染和捕捉极其复杂的场景。本 ShaderSync 版本还同步了 karyonix 的 Shader mod (同时兼容 Optifine)。仅适用于本地世界!
+
 minema.config.preloadChunks=区块预加载
 minema.config.preloadChunks.tooltip=启用后，Minema 会在录制过程中大幅提升区块加载速度。此项仅在本地世界才会起效!
 
