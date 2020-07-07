@@ -104,8 +104,8 @@ minema.config.useAlpha.tooltip=啟用後, Alpha 通道也會被發送到 ffmpeg�
 minema.config.heldFrames=保持幀
 minema.config.heldFrames.tooltip=該選項允許您在特定時間內保持壹個渲染幀進行錄制。這只對於像 PTGI 這樣的光線追蹤光影包有用, 因為它們的光照需要幾個渲染幀後才能刷新
 
-minema.config.useAlphaScreenshot=截圖保存 Alpha 通道
-minema.config.useAlphaScreenshot.tooltip=在按 F2 截圖時啟用 Alpha 通道
+minema.config.useAlphaScreenshot=截取 Alpha 通道
+minema.config.useAlphaScreenshot.tooltip=在按 F2 截圖時啟用 Alpha 通道信息
 
 # config engine
 minema.config.engineSpeed=引擎速率
