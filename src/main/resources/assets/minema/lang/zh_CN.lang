@@ -59,7 +59,7 @@ minema.config.videoEncoderParams=编码器参数
 minema.config.videoEncoderParams.tooltip=视频编码程序的参数。占位符：%%WIDTH%% - 帧宽度, %%HEIGHT%% - 帧高度, %%FPS%% - 帧率。%%NAME%% - 要使用的视频文件名。如果视频编码器被禁用, 此项将会被忽略。
 
 minema.config.videoEncoderParamsAlpha=编码器参数 (alpha)
-minema.config.videoEncoderParamsAlpha.tooltip=启用“使用 Alpha 通道”选项时的视频编码程序的参数。占位符与前者相同。对于 PNG 序列, 你可以使用 "-f rawvideo -pix_fmt rgb32 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip %NAME%_%d.png"。
+minema.config.videoEncoderParamsAlpha.tooltip=启用“使用 Alpha 通道”选项时的视频编码程序的参数。占位符与前者相同。对于 PNG 序列, 您可以使用 "-f rawvideo -pix_fmt rgb32 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip %NAME%_%d.png"。
 
 minema.config.snapResolution=对齐分辨率
 minema.config.snapResolution.tooltip=如果必要的话, 请将录制分辨率切换到下一个较低的分辨率, 这样宽度和高度就可以被该模数整除。FFMpeg 只需要 mod2, 其他的编码器可能要更高一些。
@@ -99,7 +99,7 @@ minema.config.aaFastRenderFix=抗锯齿与快速渲染修复
 minema.config.aaFastRenderFix.tooltip=当启用 OptiFine 的反锯齿或快速渲染功能并与自定义分辨率一起使用时, 可以修复损坏的录制文件。此项是通过调整整个应用程序窗口的大小来作为一种解决方案的。
 
 minema.config.useAlpha=使用 Alpha 通道
-minema.config.useAlpha.tooltip=启用后, Alpha 通道也会被发送到 ffmpeg。为了实现该效果, 你需要使用一些模组的功能, 比如 Blockbuster 的 0% 不透明度的色度天空功能 (或是图像、自定义模型伪装的色键选项)。该功能在大多数情况下不适用于光影包, 因为它们忽略了传递 alpha 值 (个别光影包需通过编辑实现)。
+minema.config.useAlpha.tooltip=启用后, Alpha 通道也会被发送到 ffmpeg。为了实现该效果, 您需要使用一些模组的功能, 比如 Blockbuster 的 0% 不透明度的色度天空功能 (或是图像、自定义模型伪装的色键选项)。该功能在大多数情况下不适用于光影包, 因为它们忽略了传递 alpha 值 (个别光影包需通过编辑实现)。
 
 minema.config.heldFrames=保持帧
 minema.config.heldFrames.tooltip=该选项允许您在特定时间内保持一个渲染帧进行录制。这只对于像 PTGI 这样的光线追踪光影包有用, 因为它们的光照需要几个渲染帧后才能刷新
