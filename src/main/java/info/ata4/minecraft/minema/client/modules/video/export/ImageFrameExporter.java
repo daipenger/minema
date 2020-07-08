@@ -30,7 +30,7 @@ public class ImageFrameExporter extends FrameExporter {
 
 	@Override
 	protected void doExportFrame(ByteBuffer buffer) throws Exception {
-		if (TimerModifier.getTimer().canRecord()) {
+		if (TimerModifier.canRecord()) {
 			String fileName = String.format("%06d.tga", CaptureSession.singleton.getTime().getNumFrames());
 			Path path = CaptureSession.singleton.getCaptureDir().resolve(movieName).resolve(fileName);
 			writeImage(path, buffer, width, height);

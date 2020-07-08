@@ -44,7 +44,7 @@ public class PipeFrameExporter extends FrameExporter {
 
 	@Override
 	protected void doExportFrame(ByteBuffer buffer) throws Exception {
-		if (pipe.isOpen() && TimerModifier.getTimer().canRecord()) {
+		if (pipe.isOpen() && TimerModifier.canRecord()) {
 			pipe.write(buffer);
 			buffer.rewind();
 		}

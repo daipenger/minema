@@ -86,7 +86,7 @@ public class CaptureTime {
     }
 
     public void nextFrame() {
-        if (!TimerModifier.getTimer().canRecord()) {
+        if (!TimerModifier.canRecord()) {
             return;
         }
 

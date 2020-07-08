@@ -29,6 +29,10 @@ public class TimerModifier extends CaptureModule {
 		return timer;
 	}
 
+	public static boolean canRecord() {
+		return timer == null || timer.canRecord();
+	}
+
 	@Override
 	protected void doEnable() {
 		MinemaConfig cfg = Minema.instance.getConfig();
