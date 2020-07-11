@@ -33,6 +33,7 @@ minema.gui.file_exists=Un fichier avec ce nom existe déjà, choisissez-en un au
 # keys
 key.categories.minema=Minema
 key.minema.capture=Démarrer/Arrêter l'enregistrement
+key.minema.freeze=Bloquer le chargement des chunks
 
 # commands
 commands.minema.usage=/minema <enable|disable>
@@ -44,7 +45,7 @@ minema.config.encoding.tooltip=Paramètres de l'encodage vidéo.
 minema.config.capturing=Enregistrement
 minema.config.capturing.tooltip=Paramètres de l'enregistrement vidéo.
 
-minema.config.engine=Moteur de capture
+minema.config.engine=Moteur d'enregistrement
 minema.config.engine.tooltip=Paramètres avancés du moteur utilisés durant l'enregistrement.
 
 # config encoding
@@ -57,8 +58,14 @@ minema.config.videoEncoderPath.tooltip=Chemin vers l'exécutable du programme d'
 minema.config.videoEncoderParams=Arguments d'encodage
 minema.config.videoEncoderParams.tooltip=Arguments pour le programme d'encodage vidéo. %%WIDTH%% - largeur de l'image, %%HEIGHT%% - hauteur de l'image, %%FPS%% - fréquence d'images. %%NAME%% - nom de la sortie vidéo. Est ignoré si l'encodage est désactivé.
 
+minema.config.videoEncoderParamsAlpha=Arguments d'encodage alpha
+minema.config.videoEncoderParamsAlpha.tooltip=Arguments pour le programme d'encodage vidéo quand l'utilisation de l'alpha est activée. Pour les séquences PNG, il est possible d'utiliser "-f rawvideo -pix_fmt rgb32 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip %NAME%_%d.png".
+
 minema.config.snapResolution=Résolution instantanée
 minema.config.snapResolution.tooltip=Lorsque nécessaire, met à jour la résolution d'enregistrement de telle sorte que la largeur et la hauteur soient divisibles par le modulo. mod2 est suffisant pour ffmpeg, d'autres programmes d'encodage peuvent nécessiter davantage.
+
+minema.config.enableEncoderLogging=Logs d'encodage
+minema.config.enableEncoderLogging.tooltip=Cette option permet l'écriture des logs de l'encodage ffmpeg en créant un fichier *.log pour chaque vidéo. Désactiver cette option permet d'empêcher la création de ce fichier.
 
 # config capturing
 minema.config.frameWidth=Largeur
@@ -82,11 +89,21 @@ minema.config.showOverlay.tooltip=Lorsque activé, davantage d'informations à p
 minema.config.captureDepth=Enregistrer le depth buffer
 minema.config.captureDepth.tooltip=Lorsque activé, le depth buffer est enregistré de manière linéaire. Attention : le buffer limite certaines possibilités rendant l'enregistrement plus lent.
 
+minema.config.captureDepthDistance=Distance de profondeur
+minema.config.captureDepthDistance.tooltip=Si supérieur à 0, the depth capturing will adjust the depth according to this maximum value rather than Minecraft's render distance
+
 minema.config.recordGui=Enregistrer l'interface
 minema.config.recordGui.tooltip=Lorsque désactivé, l'interface (la hotbar, la main, le curseur, etc) n'est pas enregistrée.
 
 minema.config.aaFastRenderFix=Antialiasing et fix de rendu rapide
 minema.config.aaFastRenderFix.tooltip=Permet de corriger les enregistrements ratés dus à l'antialiasing d'Optifine ou le rendu rapide d'une résolution personnalisée. Redimensionne le jeu.
+
+minema.config.useAlpha=Utiliser l'alpha
+minema.config.useAlpha.tooltip=Lorsque activé, le channel alpha sera aussi envoyé à ffmpeg. Afin de le rendre visible, vous devrez utiliser quelques fonctionnalités d'autres mods, tel que le ciel chroma de Blockbuster avec une opacité de 0% (ou de modèles personnalisés). La plupart du temps, cela ne fonctionnera pas avec les shaders, du fait qu'ils ignorent le channel alpha.
+minema.config.heldFrames=Maintien d'images
+minema.config.heldFrames.tooltip=Cette option permet de maintenir le rendu de certaines images pendant une certaine durée. Cela n'est utile qu'avec les shaders supportant le ray tracing comme PTGI où la lumière prend un certain nombre d'images à se propager.
+minema.config.useAlphaScreenshot=Capture d'écran alpha
+minema.config.useAlphaScreenshot.tooltip=Active l'alpha sur les captures d'écran prises avec F2
 
 # config engine
 minema.config.engineSpeed=Vitesse du moteur
