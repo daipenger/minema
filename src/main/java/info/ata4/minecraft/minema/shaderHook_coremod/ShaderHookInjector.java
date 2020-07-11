@@ -190,13 +190,16 @@ public final class ShaderHookInjector implements IClassTransformer {
 
 	private void transformGlStateManager(ClassNode classNode, boolean isInAlreadyDeobfuscatedState) {
 
+		String blendFunc = isInAlreadyDeobfuscatedState ? "blendFunc" : "a";
+		String tryBlendFuncSeparate = isInAlreadyDeobfuscatedState ? "tryBlendFuncSeparate" : "a";
+
 		// test blendFunc tho may need to alter more
 		for (MethodNode method : classNode.methods) {
 
 			/**
 			 * {@link net.minecraft.client.renderer.GlStateManager#blendFunc(int, int)}
 			 */
-			if(method.name.equals("blendFunc") && method.desc.equals("(II)V")) {
+			if((method.name.equals(blendFunc)) && method.desc.equals("(II)V")) {
 
 				AbstractInsnNode invokeNode = null;
 				Iterator<AbstractInsnNode> it = method.instructions.iterator();
@@ -221,7 +224,7 @@ public final class ShaderHookInjector implements IClassTransformer {
 			/**
 			 * {@link net.minecraft.client.renderer.GlStateManager#tryBlendFuncSeparate(int, int, int, int)}
 			 */
-			if(method.name.equals("tryBlendFuncSeparate") && method.desc.equals("(IIII)V")) {
+			if(method.name.equals(tryBlendFuncSeparate) && method.desc.equals("(IIII)V")) {
 
 				AbstractInsnNode invokeNode = null;
 				Iterator<AbstractInsnNode> it = method.instructions.iterator();

@@ -1,10 +1,11 @@
 package info.ata4.minecraft.minema.client.util;
 
+import info.ata4.minecraft.minema.CaptureSession;
 import info.ata4.minecraft.minema.Minema;
+import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
 
 import java.awt.image.BufferedImage;
 
@@ -18,11 +19,18 @@ public class ScreenshotHelper
 		return Minema.instance.getConfig().useAlphaScreenshot.get() ? BufferedImage.TYPE_4BYTE_ABGR : BufferedImage.TYPE_INT_RGB;
 	}
 
+	public static boolean canSubstitute()
+	{
+		MinemaConfig config = Minema.instance.getConfig();
+
+		return config.useAlphaScreenshot.get() || (CaptureSession.singleton.isEnabled() && config.useAlpha.get());
+	}
+
 	/**
 	 * Replace the call for normal blend functions
 	 */
 	public static void replaceBlendFunc(int srcFactor, int dstFactor) {
-		if(Minema.instance.getConfig().useAlphaScreenshot.get()) {
+		if(canSubstitute()) {
 			if(srcFactor == GL11.GL_SRC_ALPHA && dstFactor == GL11.GL_ONE_MINUS_SRC_ALPHA) {
 				magicBlendFunction();
 			}
@@ -36,7 +44,7 @@ public class ScreenshotHelper
 	}
 
 	public static void tryBlendFuncSeparate(int srcFactor, int dstFactor, int srcFactorAlpha, int dstFactorAlpha) {
-		if(Minema.instance.getConfig().useAlphaScreenshot.get()) {
+		if(canSubstitute()) {
 			if (srcFactor == GL11.GL_SRC_ALPHA && dstFactor == GL11.GL_ONE_MINUS_SRC_ALPHA
 					&& srcFactorAlpha == GL11.GL_ONE_MINUS_DST_ALPHA && dstFactorAlpha == GL11.GL_ONE) {
 				OpenGlHelper.glBlendFunc(srcFactor, dstFactor, srcFactorAlpha, dstFactorAlpha);
