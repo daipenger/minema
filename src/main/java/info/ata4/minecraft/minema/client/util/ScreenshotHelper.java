@@ -21,9 +21,13 @@ public class ScreenshotHelper
 	 * CALLED BY ASM INJECTED CODE! (COREMOD) DO NOT MODIFY METHOD SIGNATURE!
 	 */
 	public static boolean canSubstitute() {
-		MinemaConfig config = Minema.instance.getConfig();
+		if (Minema.instance != null) {
+			MinemaConfig config = Minema.instance.getConfig();
 
-		return config != null && (config.useAlphaScreenshot.get() || (CaptureSession.singleton.isEnabled() && config.useAlpha.get()));
+			return config != null && (config.useAlphaScreenshot.get() || (CaptureSession.singleton.isEnabled() && config.useAlpha.get()));
+		}
+
+		return false;
 	}
 
 	/**
