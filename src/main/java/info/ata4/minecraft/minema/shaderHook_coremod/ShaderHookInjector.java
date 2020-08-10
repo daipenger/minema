@@ -213,11 +213,16 @@ public final class ShaderHookInjector implements IClassTransformer {
 				}
 
 				if(invokeNode != null) {
-					AbstractInsnNode replacementNode = new MethodInsnNode(Opcodes.INVOKESTATIC,
+					AbstractInsnNode methodInvoke = new MethodInsnNode(Opcodes.INVOKESTATIC,
 							"info/ata4/minecraft/minema/client/util/ScreenshotHelper", "replaceBlendFunc",
 							"(II)V", false);
-					method.instructions.insert(invokeNode, replacementNode);
-					method.instructions.remove(invokeNode);
+					InsnList list = new InsnList();
+
+					list.add(new VarInsnNode(Opcodes.ILOAD, 0));
+					list.add(new VarInsnNode(Opcodes.ILOAD, 1));
+					list.add(methodInvoke);
+
+					method.instructions.insert(invokeNode, list);
 				}
 			}
 
@@ -238,11 +243,18 @@ public final class ShaderHookInjector implements IClassTransformer {
 				}
 
 				if(invokeNode != null) {
-					AbstractInsnNode replacementNode = new MethodInsnNode(Opcodes.INVOKESTATIC,
+					AbstractInsnNode methodInvoke = new MethodInsnNode(Opcodes.INVOKESTATIC,
 							"info/ata4/minecraft/minema/client/util/ScreenshotHelper", "tryBlendFuncSeparate",
 							"(IIII)V", false);
-					method.instructions.insert(invokeNode, replacementNode);
-					method.instructions.remove(invokeNode);
+					InsnList list = new InsnList();
+
+					list.add(new VarInsnNode(Opcodes.ILOAD, 0));
+					list.add(new VarInsnNode(Opcodes.ILOAD, 1));
+					list.add(new VarInsnNode(Opcodes.ILOAD, 2));
+					list.add(new VarInsnNode(Opcodes.ILOAD, 3));
+					list.add(methodInvoke);
+
+					method.instructions.insert(invokeNode, list);
 				}
 			}
 		}
