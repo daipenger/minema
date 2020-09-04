@@ -68,7 +68,7 @@ public class CaptureOverlay extends CaptureModule {
 		int s = resolution.getScaleFactor();
 
 		GlStateManager.pushMatrix();
-		GlStateManager.scale(s, s, s);
+		mc.entityRenderer.setupOverlayRendering();
 
 		for (String string : info)
 		{
