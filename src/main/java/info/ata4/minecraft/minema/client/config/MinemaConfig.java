@@ -50,7 +50,7 @@ public class MinemaConfig {
 	public final ConfigString videoEncoderParams = new ConfigString(
 			"-f rawvideo -pix_fmt bgr24 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%.mp4");
 	public final ConfigString videoEncoderParamsAlpha = new ConfigString(
-			"-f rawvideo -pix_fmt rgb32 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip -c:v qtrle %NAME%.mov");
+			"-f rawvideo -pix_fmt rgb32 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%_rgb.mp4 -vf vflip,alphaextract,format=yuv420p %NAME%_alpha.mp4");
 	public final ConfigEnum<SnapResolution> snapResolution = new ConfigEnum<>(SnapResolution.MOD2);
 	public final ConfigBoolean enableEncoderLogging = new ConfigBoolean(true);
 
