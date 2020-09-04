@@ -13,10 +13,18 @@ import java.util.ArrayList;
 
 import info.ata4.minecraft.minema.CaptureSession;
 import info.ata4.minecraft.minema.Minema;
+import info.ata4.minecraft.minema.client.event.EndRenderEvent;
+import info.ata4.minecraft.minema.client.event.MinemaEventbus;
 import info.ata4.minecraft.minema.client.util.CaptureTime;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.GuiErrorBase;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 /**
@@ -26,36 +34,53 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
  */
 public class CaptureOverlay extends CaptureModule {
 
-	@SubscribeEvent
-	public void onRenderGameOverlay(RenderGameOverlayEvent.Text evt) {
-		CaptureTime time = CaptureSession.singleton.getTime();
-
-		ArrayList<String> left = evt.getLeft();
-
-		if (MC.gameSettings.showDebugInfo) {
-			// F3 menu is open -> add spacer
-			left.add("");
-		}
-
-		String frame = String.valueOf(time.getNumFrames());
-		left.add("Frame: " + frame);
-
-		String fps = Minecraft.getDebugFPS() + " fps";
-		left.add("Rate: " + fps);
-
-		String avg = (int) time.getAverageFPS() + " fps";
-		left.add("Avg.: " + avg);
-
-		String delay = CaptureTime.getTimeUnit(time.getPreviousCaptureTime());
-		left.add("Delay: " + delay);
-
-		left.add("Time R: " + time.getRealTimeString());
-		left.add("Time V: " + time.getVideoTimeString());
-	}
-
 	@Override
 	protected void doEnable() throws Exception {
 		MinecraftForge.EVENT_BUS.register(this);
+		MinemaEventbus.endRenderBUS.registerListener((e) -> onRenderEnd(e));
+	}
+
+	private void onRenderEnd(EndRenderEvent e) throws Exception {
+		CaptureTime time = CaptureSession.singleton.getTime();
+		ArrayList<String> info = new ArrayList<String>();
+
+		String frame = String.valueOf(time.getNumFrames());
+		info.add("Frame: " + frame);
+
+		String fps = Minecraft.getDebugFPS() + " fps";
+		info.add("Rate: " + fps);
+
+		String avg = (int) time.getAverageFPS() + " fps";
+		info.add("Avg.: " + avg);
+
+		String delay = CaptureTime.getTimeUnit(time.getPreviousCaptureTime());
+		info.add("Delay: " + delay);
+
+		info.add("Time R: " + time.getRealTimeString());
+		info.add("Time V: " + time.getVideoTimeString());
+
+		Minecraft mc = Minecraft.getMinecraft();
+		FontRenderer font = mc.fontRenderer;
+		ScaledResolution resolution = new ScaledResolution(mc);
+
+		int x = 10;
+		int y = resolution.getScaledHeight() - 14 * (info.size() - 1) - font.FONT_HEIGHT - 10;
+		int s = resolution.getScaleFactor();
+
+		GlStateManager.pushMatrix();
+		GlStateManager.scale(s, s, s);
+
+		for (String string : info)
+		{
+			int w = font.getStringWidth(string);
+
+			Gui.drawRect(x - 2, y - 2, x + w + 2, y + font.FONT_HEIGHT + 2, 0x88000000);
+			font.drawStringWithShadow(string, x, y + 1, 0xffffff);
+
+			y += 14;
+		}
+
+		GlStateManager.popMatrix();
 	}
 
 	@Override
