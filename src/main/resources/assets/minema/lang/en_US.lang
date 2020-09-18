@@ -102,7 +102,7 @@ minema.config.useAlpha=Use alpha
 minema.config.useAlpha.tooltip=When enabled, alpha channel will be sent to ffmpeg as well. In order to actually to appear, you need to use some mod features, like Blockbuster's chroma sky feature with 0% opacity (or keying option of image or custom model morphs). This also doesn't work with shaders, most of the times, as they ignore passing the alpha value (individual shader packs requires editing).
 
 minema.config.heldFrames=Held frames
-minema.config.heldFrames.tooltip=This option allows you to hold a render frame for recording for specific time. It's only useful with ray tracing shaders like PTGI whose lighting takes a couple of render frames to catch up.
+minema.config.heldFrames.tooltip=This option allows you to hold a render frame for recording for specific time. It's only useful with shaders that support path/ray tracing (like PTGI) or temporals (TAA) whose lighting takes a couple of render frames to catch up.
 
 minema.config.useAlphaScreenshot=Screenshot alpha
 minema.config.useAlphaScreenshot.tooltip=Enable alpha in screenshots made by F2 keybind
