@@ -99,7 +99,7 @@ minema.config.aaFastRenderFix=Antialiasing et fix de rendu rapide
 minema.config.aaFastRenderFix.tooltip=Permet de corriger les enregistrements ratés dus à l'antialiasing d'Optifine ou le rendu rapide d'une résolution personnalisée. Redimensionne le jeu.
 
 minema.config.useAlpha=Utiliser l'alpha
-minema.config.useAlpha.tooltip=Lorsque activé, le channel alpha sera aussi envoyé à ffmpeg. Afin de le rendre visible, vous devrez utiliser quelques fonctionnalités d'autres mods, tel que le ciel chroma de Blockbuster avec une opacité de 0% (ou de modèles personnalisés). La plupart du temps, cela ne fonctionnera pas avec les shaders, du fait qu'ils ignorent le channel alpha.
+minema.config.useAlpha.tooltip=Lorsque activé, le channel alpha sera aussi envoyé à ffmpeg. Afin de le rendre visible, vous devrez utiliser quelques fonctionnalités d'autres mods, tel que le ciel chroma de Blockbuster avec une opacité de 0%% (ou de modèles personnalisés). La plupart du temps, cela ne fonctionnera pas avec les shaders, du fait qu'ils ignorent le channel alpha.
 minema.config.heldFrames=Maintien d'images
 minema.config.heldFrames.tooltip=Cette option permet de maintenir le rendu de certaines images pendant une certaine durée. Cela n'est utile qu'avec les shaders supportant le ray tracing comme PTGI où la lumière prend un certain nombre d'images à se propager.
 minema.config.useAlphaScreenshot=Capture d'écran alpha

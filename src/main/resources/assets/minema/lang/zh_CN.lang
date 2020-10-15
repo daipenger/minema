@@ -99,7 +99,7 @@ minema.config.aaFastRenderFix=抗锯齿与快速渲染修复
 minema.config.aaFastRenderFix.tooltip=当启用 OptiFine 的反锯齿或快速渲染功能并与自定义分辨率一起使用时，可以修复损坏的录制文件。此项是通过调整整个应用程序窗口的大小来作为一种解决方案的。
 
 minema.config.useAlpha=使用 Alpha 通道
-minema.config.useAlpha.tooltip=启用后，Alpha 通道也会被发送到 ffmpeg。为了实现该效果，您需要使用一些模组的功能，比如 Blockbuster 的 0% 不透明度的色度天空功能（或是图像、自定义模型伪装的色键选项）。该功能在大多数情况下不适用于光影包，因为它们忽略了传递 Alpha 值（个别光影包需通过编辑实现）。
+minema.config.useAlpha.tooltip=启用后，Alpha 通道也会被发送到 ffmpeg。为了实现该效果，您需要使用一些模组的功能，比如 Blockbuster 的 0%% 不透明度的色度天空功能（或是图像、自定义模型伪装的色键选项）。该功能在大多数情况下不适用于光影包，因为它们忽略了传递 Alpha 值（个别光影包需通过编辑实现）。
 
 minema.config.heldFrames=保持帧
 minema.config.heldFrames.tooltip=该选项允许您在特定时间内保持一个渲染帧进行录制。这只对支持路径/光线追踪（如 PTGI）或临时（TAA）这样的光影包有用，因为它们的光照需要几个渲染帧后才能刷新
