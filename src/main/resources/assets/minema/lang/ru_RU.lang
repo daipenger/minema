@@ -59,7 +59,7 @@ minema.config.videoEncoderParams=Аргументы Кодировщика
 minema.config.videoEncoderParams.tooltip=Аргументы для программы-кодировщика. Шаблоны: %%WIDTH%% - ширина кадра, %%HEIGHT%% - высота кадра, %%FPS%% - кадровая частота. %%NAME%% - имя выводимого видеофайла. Игнорируется, если отключено использование видеокодировщика.
 
 minema.config.videoEncoderParamsAlpha=Аргументы кодировщика (альфа-канал)
-minema.config.videoEncoderParamsAlpha.tooltip=Аргументы для видеокодировочной программы при условии включённой опции 'использовать альфа-канал'. Шаблон остается таким же. Для PNG секвенций вы также можете использовать аргументы "-f rawvideo -pix_fmt rgb32 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip %NAME%_%d.png".
+minema.config.videoEncoderParamsAlpha.tooltip=Аргументы для видеокодировочной программы при условии включённой опции 'использовать альфа-канал'. Шаблон остается таким же. Для PNG секвенций вы также можете использовать аргументы "-f rawvideo -pix_fmt rgb32 -s %%WIDTH%%x%%HEIGHT%% -r %%FPS%% -i - -vf vflip %%NAME%%_%%d.png".
 
 minema.config.snapResolution=Разрешение Привязки
 minema.config.snapResolution.tooltip=При необходимости, привязывает разрешение выводимого видео к более низкому, дабы таким образом сделать его ширину и высоту делимыми для этого модуля. FFMpeg'у необходим только mod2, другим кодировщикам может потребоваться больше.

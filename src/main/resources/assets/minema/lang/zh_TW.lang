@@ -59,7 +59,7 @@ minema.config.videoEncoderParams=編碼器參數
 minema.config.videoEncoderParams.tooltip=視頻編碼程序的參數。占位符：%%WIDTH%% - 幀寬度，%%HEIGHT%% - 幀高度，%%FPS%% - 幀率。%%NAME%% - 要使用的視頻文件名。如果視頻編碼器被禁用，此項將會被忽略。
 
 minema.config.videoEncoderParamsAlpha=編碼器參數（Alpha）
-minema.config.videoEncoderParamsAlpha.tooltip=啟用“使用 Alpha 通道”選項時的視頻編碼程序的參數。占位符與前者相同。對於 PNG 序列，您可以使用 "-f rawvideo -pix_fmt rgb32 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip %NAME%_%d.png"。
+minema.config.videoEncoderParamsAlpha.tooltip=啟用“使用 Alpha 通道”選項時的視頻編碼程序的參數。占位符與前者相同。對於 PNG 序列，您可以使用 "-f rawvideo -pix_fmt rgb32 -s %%WIDTH%%x%%HEIGHT%% -r %%FPS%% -i - -vf vflip %%NAME%%_%%d.png"。
 
 minema.config.snapResolution=對齊分辨率
 minema.config.snapResolution.tooltip=如果必要的話，請將錄制分辨率切換到下壹個較低的分辨率，這樣寬度和高度就可以被該模數整除。FFMpeg 只需要 mod2，其他的編碼器可能要更高壹些。

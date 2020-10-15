@@ -59,7 +59,7 @@ minema.config.videoEncoderParams=Encoder Arguments
 minema.config.videoEncoderParams.tooltip=Arguments for the video encoding program. Placeholders: %%WIDTH%% - frame width, %%HEIGHT%% - frame height, %%FPS%% - frame rate. %%NAME%% - video file name to use. Ignored if the video encoder is disabled.
 
 minema.config.videoEncoderParamsAlpha=Encoder Arguments (alpha)
-minema.config.videoEncoderParamsAlpha.tooltip=Arguments for the video encoding program when 'Use alpha' option is enabled. Placeholders are the same. For PNG sequences, you could use "-f rawvideo -pix_fmt rgb32 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip %NAME%_%d.png".
+minema.config.videoEncoderParamsAlpha.tooltip=Arguments for the video encoding program when 'Use alpha' option is enabled. Placeholders are the same. For PNG sequences, you could use "-f rawvideo -pix_fmt rgb32 -s %%WIDTH%%x%%HEIGHT%% -r %%FPS%% -i - -vf vflip %%NAME%%_%%d.png".
 
 minema.config.snapResolution=Snap Resolution
 minema.config.snapResolution.tooltip=If necessary, snaps the recording resolution to the next lower resolution so that width and height is divisible by this modulus. FFMpeg only needs mod2, some other encoders might need more.
