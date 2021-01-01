@@ -1,12 +1,15 @@
 package info.ata4.minecraft.minema.shaderHook_coremod;
 
 import net.minecraft.launchwrapper.IClassTransformer;
+
+import org.apache.logging.log4j.LogManager;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.Opcodes;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
+import org.objectweb.asm.tree.FieldInsnNode;
 import org.objectweb.asm.tree.FrameNode;
 import org.objectweb.asm.tree.InsnList;
 import org.objectweb.asm.tree.InsnNode;
@@ -17,6 +20,8 @@ import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 import org.objectweb.asm.tree.TypeInsnNode;
 import org.objectweb.asm.tree.VarInsnNode;
+
+import info.ata4.minecraft.minema.client.modules.SyncModule;
 
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -91,8 +96,10 @@ public final class ShaderHookInjector implements IClassTransformer {
 					AbstractInsnNode currentNode = iterator.next();
 					if (doesMatchStaticCall(currentNode, calledClass, calledMethod, "()V")) {
 						iterator.add(new MethodInsnNode(Opcodes.INVOKESTATIC,
-								"info/ata4/minecraft/minema/client/modules/ShaderSync",
-								"setFrameTimeCounter", "()V", false));
+//								"info/ata4/minecraft/minema/client/modules/ShaderSync",
+//								"setFrameTimeCounter", "()V", false));
+								"info/ata4/minecraft/minema/client/modules/SyncModule",
+								"doFrameTimeSync", "()V", false));
 						break;
 					}
 				}
@@ -118,37 +125,74 @@ public final class ShaderHookInjector implements IClassTransformer {
 	}
 
 	private void transformMinecraftServer(ClassNode classNode, boolean isInAlreadyDeobfuscatedState) {
+		
 		for (MethodNode method : classNode.methods) {
 			if (method.name.equals("run")) {
-				int i = 0;
+//				int i = 0;
 				Iterator<AbstractInsnNode> nodes = method.instructions.iterator();
 				AbstractInsnNode target = null;
-
+				
+				boolean isDeobf = false;
+				AbstractInsnNode last = null;
 				while (nodes.hasNext()) {
 					AbstractInsnNode node = nodes.next();
 
 					if (node instanceof VarInsnNode) {
 						VarInsnNode var = (VarInsnNode) node;
 
-						if (var.getOpcode() == Opcodes.LSTORE && var.var == 1) {
-							if (i == 1) {
-								target = var;
+//						if (var.getOpcode() == Opcodes.LSTORE && var.var == 1) {
+//							if (i == 1) {
+//								target = var;
+//							}
+//
+//							i += 1;
+//						}
+						
+//					    INVOKESTATIC net/minecraft/server/MinecraftServer.getCurrentTimeMillis ()J
+//					    LSTORE 3
+						if (var.getOpcode() == Opcodes.LSTORE && var.var == 3) {
+							if (last instanceof MethodInsnNode) {
+								MethodInsnNode m = (MethodInsnNode) last;
+								if (m.getOpcode() == Opcodes.INVOKESTATIC) {
+									if (m.name.equals("getCurrentTimeMillis")) {
+										target = last;
+										isDeobf = true;
+										break;
+									} else if (m.name.equals("aw")) {
+										target = last;
+										isDeobf = false;
+										break;
+									}
+								}
 							}
-
-							i += 1;
 						}
 					}
+					last = node;
 				}
 
 				if (target != null) {
 					InsnList list = new InsnList();
 
-					list.add(new VarInsnNode(Opcodes.LLOAD, 1));
-					list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "info/ata4/minecraft/minema/client/modules/ShaderSync", "correctServerTick", "(J)J", false));
-					list.add(new VarInsnNode(Opcodes.LSTORE, 1));
-
-					method.instructions.insert(target, list);
+//					list.add(new VarInsnNode(Opcodes.LLOAD, 1));
+//					list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "info/ata4/minecraft/minema/client/modules/ShaderSync", "correctServerTick", "(J)J", false));
+//					list.add(new VarInsnNode(Opcodes.LSTORE, 1));
+//
+//					method.instructions.insert(target, list);
+					
+//				    ALOAD 0
+//				    ALOAD 0
+//				    GETFIELD info/ata4/minecraft/minema/shaderHook_coremod/ShaderHookInjector.currentTime : J
+//				    INVOKESTATIC info/ata4/minecraft/minema/client/modules/SyncModule.doServerTickSync (J)J
+//				    PUTFIELD info/ata4/minecraft/minema/shaderHook_coremod/ShaderHookInjector.currentTime : J
+					String fieldCurrentTime = isDeobf ? "currentTime" : "ab";
+					list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+					list.add(new VarInsnNode(Opcodes.ALOAD, 0));
+					list.add(new FieldInsnNode(Opcodes.GETFIELD, "net/minecraft/server/MinecraftServer", fieldCurrentTime, "J"));
+					list.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "info/ata4/minecraft/minema/client/modules/SyncModule", "doServerTickSync", "(J)J", false));
+					list.add(new FieldInsnNode(Opcodes.PUTFIELD, "net/minecraft/server/MinecraftServer", fieldCurrentTime, "J"));
+					method.instructions.insertBefore(target, list);
 				}
+				
 			}
 		}
 	}

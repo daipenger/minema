@@ -104,11 +104,11 @@ public class TickSynchronizer extends CaptureModule {
 
 		try {
 			while (target.get() < actual.get()) {
-				if (L.isDebugEnabled()) {
+//				if (L.isDebugEnabled()) {
 					int behind = actual.get() - target.get();
 					Side otherSide = side == Side.CLIENT ? Side.SERVER : Side.CLIENT;
-					L.debug("{} waiting, {} {} ticks behind", side, otherSide, behind);
-				}
+					L.info("{} waiting, {} {} ticks behind", side, otherSide, behind);
+//				}
 
 				waitCon.awaitNanos(WAIT_INTERVAL);
 
@@ -122,9 +122,9 @@ public class TickSynchronizer extends CaptureModule {
 
 			actual.addAndGet(1);
 
-			if (L.isDebugEnabled()) {
-				L.debug("{} tick: {}", side, actual.get());
-			}
+//			if (L.isDebugEnabled()) {
+				L.info("{} tick: {}", side, actual.get());
+//			}
 
 			signalCon.signal();
 		} catch (InterruptedException ex) {

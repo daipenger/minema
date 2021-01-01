@@ -7,7 +7,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import info.ata4.minecraft.minema.Minema;
-import info.ata4.minecraft.minema.client.modules.ShaderSync;
+//import info.ata4.minecraft.minema.client.modules.ShaderSync;
 import net.minecraft.client.resources.I18n;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -60,9 +60,9 @@ public abstract class FrameExporter {
 	}
 
 	public final void exportFrame(ByteBuffer buffer) throws Exception {
-		if (ShaderSync.noHolding()) {
-			ShaderSync.freeze(false);
-		}
+//		if (ShaderSync.noHolding()) {
+//			ShaderSync.freeze(false);
+//		}
 
 		// export frame in the background so that the next frame can be
 		// rendered in the meantime

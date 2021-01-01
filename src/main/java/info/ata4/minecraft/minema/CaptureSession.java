@@ -8,8 +8,9 @@ import info.ata4.minecraft.minema.client.modules.CaptureModule;
 import info.ata4.minecraft.minema.client.modules.CaptureNotification;
 import info.ata4.minecraft.minema.client.modules.CaptureOverlay;
 import info.ata4.minecraft.minema.client.modules.ChunkPreloader;
-import info.ata4.minecraft.minema.client.modules.ShaderSync;
-import info.ata4.minecraft.minema.client.modules.TickSynchronizer;
+//import info.ata4.minecraft.minema.client.modules.ShaderSync;
+import info.ata4.minecraft.minema.client.modules.SyncModule;
+//import info.ata4.minecraft.minema.client.modules.TickSynchronizer;
 import info.ata4.minecraft.minema.client.modules.modifiers.DisplaySizeModifier;
 import info.ata4.minecraft.minema.client.modules.modifiers.GameSettingsModifier;
 import info.ata4.minecraft.minema.client.modules.modifiers.TimerModifier;
@@ -32,8 +33,8 @@ public class CaptureSession {
 
 	public static final CaptureSession singleton = new CaptureSession();
 
-	private final CaptureModule[] modules = new CaptureModule[] { new GameSettingsModifier(), new ShaderSync(),
-			new TimerModifier(), new TickSynchronizer(), new ChunkPreloader(), new DisplaySizeModifier(),
+	private final CaptureModule[] modules = new CaptureModule[] { new GameSettingsModifier(), new SyncModule(), /*new ShaderSync(),*/
+			new TimerModifier(), /*new TickSynchronizer(),*/ new ChunkPreloader(), new DisplaySizeModifier(),
 			new VideoHandler(), new CaptureOverlay(), new CaptureNotification() };
 
 	private Path captureDir;

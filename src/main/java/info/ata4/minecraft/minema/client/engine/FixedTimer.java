@@ -10,7 +10,7 @@
 package info.ata4.minecraft.minema.client.engine;
 
 import info.ata4.minecraft.minema.Minema;
-import info.ata4.minecraft.minema.client.modules.ShaderSync;
+//import info.ata4.minecraft.minema.client.modules.ShaderSync;
 import net.minecraft.util.Timer;
 
 /**
@@ -47,16 +47,16 @@ public class FixedTimer extends Timer {
 		frames += 1;
 
 		if (frames >= held) {
-			if (held > 1) {
-				ShaderSync.freeze(false);
-			}
+//			if (held > 1) {
+//				ShaderSync.freeze(false);
+//			}
 
 			frames = 0;
 			canRecord = true;
 		} else {
-			if (held > 1) {
-				ShaderSync.freeze(true);
-			}
+//			if (held > 1) {
+//				ShaderSync.freeze(true);
+//			}
 
 			elapsedTicks = 0;
 			return;
