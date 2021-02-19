@@ -2,7 +2,6 @@ package info.ata4.minecraft.minema.util.reflection;
 
 import java.lang.reflect.Field;
 import java.util.Optional;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.Timer;
 

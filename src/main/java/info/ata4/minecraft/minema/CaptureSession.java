@@ -22,6 +22,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 
@@ -41,6 +42,7 @@ public class CaptureSession {
 	private CaptureTime time;
 	private int frameLimit;
 	private boolean isEnabled;
+	private boolean isRecording;
 
 	private CaptureSession() {
 	}
@@ -73,6 +75,7 @@ public class CaptureSession {
 		if (isEnabled)
 			return false;
 		isEnabled = true;
+		isRecording = false;
 
 		try {
 			Minecraft MC = Minecraft.getMinecraft();
@@ -153,6 +156,10 @@ public class CaptureSession {
 				stopCapture();
 				return;
 			}
+			
+			// Recording begin in next frame
+			if (!this.isRecording)
+				return;
 
 			try {
 				bus.throwEvent(event);
@@ -163,11 +170,14 @@ public class CaptureSession {
 
 		}
 	}
-
+	
+	// Recording begin in next frame
 	@SubscribeEvent
 	public void onRenderTick(RenderTickEvent e) {
 		if (e.phase == Phase.END) {
-			execFrameEvent(MinemaEventbus.endRenderBUS, new EndRenderEvent(this));
+			if (this.isRecording)
+				execFrameEvent(MinemaEventbus.endRenderBUS, new EndRenderEvent(this));
+			this.isRecording = true;
 		}
 	}
 

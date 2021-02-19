@@ -119,3 +119,6 @@ minema.config.preloadChunks.tooltip=If enabled, Minema will heavily accelerate t
 
 minema.config.forcePreloadChunks=Force preload chunks
 minema.config.forcePreloadChunks.tooltip=If Preload Chunks is enabled and this is also enabled, all chunks in render distance will be preloaded. THIS IS ONLY TRULY EFFECTIVE ON LOCAL WORLDS!
+
+minema.config.networkDelay=Delay for thread packets
+minema.config.networkDelay.tooltip=Sleep the client thread for receive and handle all server thread packets.

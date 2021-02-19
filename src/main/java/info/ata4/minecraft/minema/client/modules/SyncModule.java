@@ -5,8 +5,6 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.logging.log4j.Level;
-import org.apache.logging.log4j.LogManager;
-
 import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import info.ata4.minecraft.minema.util.reflection.PrivateAccessor;
@@ -14,8 +12,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 
 // A better synchronize module insteads of ShaderSync & TickSynchronizer (Maybe)
 public class SyncModule extends CaptureModule {
@@ -24,6 +22,7 @@ public class SyncModule extends CaptureModule {
 	
 	private static float frameTime;
 	private static float frameTimeStep;
+	private static long networkDelay;
 	
 	// Called by ASM from EntityRenderer
 	public static void doFrameTimeSync() {
@@ -62,18 +61,22 @@ public class SyncModule extends CaptureModule {
 		return currentTime;
 	}
 	
-	@SubscribeEvent
-	public void onClientTick(ClientTickEvent evt) {
-		if (!isEnabled() || evt.phase != Phase.START) {
+	public static void onClientPreTick(int elapsedTicks) {
+		if (instance == null || !instance.isEnabled() || elapsedTicks <= 0)
 			return;
-		}
 		try {
-			syncTicks++;
+			syncTicks += elapsedTicks;
 			condServer.signalAll();
 			condClient.await();
 		} catch (Exception ex) {
 			L.error("Client tick sync failed: {}", ex.getMessage());
 			L.catching(Level.DEBUG, ex);
+		}
+		
+		// Wait for network message
+		try {
+			Thread.sleep(networkDelay);
+		} catch (InterruptedException e) {
 		}
 	}
 	
@@ -84,10 +87,11 @@ public class SyncModule extends CaptureModule {
 		float speed = cfg.engineSpeed.get().floatValue();
 		frameTime = PrivateAccessor.getFrameTimeCounter();
 		frameTimeStep = speed / fps;
+		networkDelay = cfg.networkDelay.get();
 		
 		instance = this;
+		syncTicks = 0;
 		lock.lock();
-		MinecraftForge.EVENT_BUS.register(this);
 	}
 
 	@Override
@@ -98,7 +102,6 @@ public class SyncModule extends CaptureModule {
 	@Override
 	protected void doDisable() throws Exception {
 		instance = null;
-		MinecraftForge.EVENT_BUS.unregister(this);
 		condServer.signalAll();
 		lock.unlock();
 	}

@@ -72,6 +72,7 @@ public class MinemaConfig {
 	public final ConfigBoolean syncEngine = new ConfigBoolean(true);
 	public final ConfigBoolean preloadChunks = new ConfigBoolean(true);
 	public final ConfigBoolean forcePreloadChunks = new ConfigBoolean(false);
+	public final ConfigInteger networkDelay = new ConfigInteger(20, 0, Integer.MAX_VALUE);
 
 	public MinemaConfig(File path) {
 		Configuration cfg = new Configuration(path);
@@ -116,6 +117,7 @@ public class MinemaConfig {
 		syncEngine.link(cfg, ENGINE_CATEGORY, "syncEngine", LANG_KEY);
 		preloadChunks.link(cfg, ENGINE_CATEGORY, "preloadChunks", LANG_KEY);
 		forcePreloadChunks.link(cfg, ENGINE_CATEGORY, "forcePreloadChunks", LANG_KEY);
+		networkDelay.link(cfg, ENGINE_CATEGORY, "networkDelay", LANG_KEY);
 	}
 
 	public Configuration getConfigForge() {

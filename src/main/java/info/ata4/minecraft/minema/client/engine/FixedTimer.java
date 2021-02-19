@@ -10,6 +10,7 @@
 package info.ata4.minecraft.minema.client.engine;
 
 import info.ata4.minecraft.minema.Minema;
+import info.ata4.minecraft.minema.client.modules.SyncModule;
 //import info.ata4.minecraft.minema.client.modules.ShaderSync;
 import net.minecraft.util.Timer;
 
@@ -20,21 +21,24 @@ import net.minecraft.util.Timer;
  */
 public class FixedTimer extends Timer {
 
-	private final float ticksPerSecond;
-	private final float framesPerSecond;
-	private float timerSpeed;
+	private final double ticksPerSecond;
+	private final double framesPerSecond;
+	private double timerSpeed;
 
 	private int held;
 	private int frames;
 	private boolean canRecord;
+	
+	private double ticks; // 0.9999999 = 1
 
-	public FixedTimer(float tps, float fps, float speed) {
-		super(tps);
+	public FixedTimer(double tps, double fps, double speed) {
+		super((float) tps);
 		ticksPerSecond = tps;
 		framesPerSecond = fps;
 		timerSpeed = speed;
 
 		held = Math.max(1, Minema.instance.getConfig().heldFrames.get());
+		ticks = -1;
 	}
 
 	public boolean canRecord() {
@@ -62,13 +66,20 @@ public class FixedTimer extends Timer {
 			return;
 		}
 
-		elapsedPartialTicks += timerSpeed * (ticksPerSecond / framesPerSecond);
-		elapsedTicks = (int) elapsedPartialTicks;
-		elapsedPartialTicks -= elapsedTicks;
-		renderPartialTicks = elapsedPartialTicks;
+		// First frame have a server tick
+		if (ticks < 0) {
+			ticks = 0;
+			SyncModule.onClientPreTick(1);
+		} else
+			ticks += timerSpeed * (ticksPerSecond / framesPerSecond);
+		elapsedTicks = (int) ticks;
+		ticks -= elapsedTicks;
+		renderPartialTicks = elapsedPartialTicks = (float) ticks;
+		
+		SyncModule.onClientPreTick(elapsedTicks); // Before client handle network message.
 	}
 
-	public void setSpeed(float speed) {
+	public void setSpeed(double speed) {
 		this.timerSpeed = speed;
 	}
 

@@ -119,3 +119,6 @@ minema.config.preloadChunks.tooltip=启用后，Minema 会在录制过程中大�
 
 minema.config.forcePreloadChunks=强制区块预加载
 minema.config.forcePreloadChunks.tooltip=在启用了区块预加载，同时也启用本功能，那么渲染距离内的所有区块都会被预加载。此项仅在本地世界才会起效！
+
+minema.config.networkDelay=主动通信延迟
+minema.config.networkDelay.tooltip=在执行完服务端Tick后主动延迟一段时间再执行客户端Tick，从而保证客户端Tick执行前所有来自服务端的数据包全部都已被处理
