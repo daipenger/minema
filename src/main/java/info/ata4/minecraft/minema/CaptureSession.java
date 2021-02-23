@@ -17,6 +17,7 @@ import info.ata4.minecraft.minema.client.modules.modifiers.TimerModifier;
 import info.ata4.minecraft.minema.client.modules.video.VideoHandler;
 import info.ata4.minecraft.minema.client.util.CaptureTime;
 import info.ata4.minecraft.minema.client.util.MinemaException;
+import info.ata4.minecraft.minema.util.reflection.ShadersHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
@@ -29,6 +30,9 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+
+import org.apache.logging.log4j.LogManager;
+import org.lwjgl.opengl.GLContext;
 
 public class CaptureSession {
 
@@ -123,7 +127,7 @@ public class CaptureSession {
 	public boolean stopCapture() {
 		if (!isEnabled)
 			return false;
-
+		
 		MinemaEventbus.reset();
 		MinecraftForge.EVENT_BUS.unregister(this);
 

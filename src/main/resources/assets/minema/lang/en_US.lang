@@ -93,7 +93,7 @@ minema.config.captureDepthDistance=Capture depth distance
 minema.config.captureDepthDistance.tooltip=If greater than 0, the depth capturing will adjust the depth according to this maximum value rather than Minecraft's render distance
 
 minema.config.recordGui=Record GUI
-minema.config.recordGui.tooltip=If disabled, the GUI (hotbar, hand, crosshair, etc) will not be recorded.
+minema.config.recordGui.tooltip=If disabled, the GUI (hotbar, hand, crosshair, etc) will not be recorded. It will be enabled force when Optifine Shaders is enabled.
 
 minema.config.aaFastRenderFix=Antialiasing and fast render fix
 minema.config.aaFastRenderFix.tooltip=Enable to fix broken recordings when using optifine's antialiasing or fast render together with a custom resolution. Resizes the whole application window as a workaround.

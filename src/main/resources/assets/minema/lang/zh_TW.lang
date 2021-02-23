@@ -93,7 +93,7 @@ minema.config.captureDepthDistance=捕獲深度距離
 minema.config.captureDepthDistance.tooltip=若大於 0，深度捕獲將根據這壹最大值而不是 Minecraft 的渲染距離來調整深度。
 
 minema.config.recordGui=錄制 GUI
-minema.config.recordGui.tooltip=禁用後，GUI（物品欄、手、準心等）將不會被錄制。
+minema.config.recordGui.tooltip=禁用後，GUI（物品欄、手、準心等）將不會被錄制。Optifine光影啟用時會強制啟用此功能
 
 minema.config.aaFastRenderFix=抗鋸齒與快速渲染修復
 minema.config.aaFastRenderFix.tooltip=當啟用 OptiFine 的反鋸齒或快速渲染功能並與自定義分辨率壹起使用時，可以修復損壞的錄制文件。此項是通過調整整個應用程序窗口的大小來作為壹種解決方案的。

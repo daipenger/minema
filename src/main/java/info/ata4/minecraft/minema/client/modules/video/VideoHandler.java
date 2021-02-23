@@ -19,6 +19,7 @@ import info.ata4.minecraft.minema.client.modules.CaptureModule;
 import info.ata4.minecraft.minema.client.modules.video.export.FrameExporter;
 import info.ata4.minecraft.minema.client.modules.video.export.ImageFrameExporter;
 import info.ata4.minecraft.minema.client.modules.video.export.PipeFrameExporter;
+import info.ata4.minecraft.minema.util.reflection.ShadersHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 
@@ -89,6 +90,10 @@ public class VideoHandler extends CaptureModule {
 
 	@Override
 	protected void doDisable() throws Exception {
+		// Export Last Frame
+		if (colorReader.isPBO)
+			exportColor();
+		
 		colorReader.destroy();
 		colorExport.destroy();
 		colorReader = null;
@@ -96,6 +101,25 @@ public class VideoHandler extends CaptureModule {
 
 		if (depthReader == null)
 			return;
+		if (depthReader.isPBO) {
+			depthExport.waitForLastExport();
+			if (depthReader.readPixels()) {
+				ByteBuffer floats = depthReader.buffer;
+
+				while (floats.hasRemaining()) {
+					float f = floats.getFloat();
+					byte b = (byte) (linearizeDepth(f) * 255);
+					depthRemapping.put(b);
+					depthRemapping.put(b);
+					depthRemapping.put(b);
+				}
+
+				floats.rewind();
+				depthRemapping.rewind();
+
+				depthExport.exportFrame(depthRemapping);
+			}
+		}
 		depthReader.destroy();
 		depthExport.destroy();
 		depthExport = null;
@@ -131,7 +155,7 @@ public class VideoHandler extends CaptureModule {
 			}
 		}
 
-		if (!recordGui) {
+		if (!recordGui && !ShadersHelper.usingShaders()) {
 			exportColor();
 
 			e.session.getTime().nextFrame();
@@ -154,7 +178,7 @@ public class VideoHandler extends CaptureModule {
 	private void onRenderEnd(EndRenderEvent e) throws Exception {
 		checkDimensions();
 
-		if (recordGui) {
+		if (recordGui || ShadersHelper.usingShaders()) {
 			exportColor();
 
 			e.session.getTime().nextFrame();

@@ -5,6 +5,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+
 import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import info.ata4.minecraft.minema.util.reflection.PrivateAccessor;
@@ -28,7 +30,7 @@ public class SyncModule extends CaptureModule {
 	public static void doFrameTimeSync() {
 		if (instance != null && instance.isEnabled()) {
 			frameTime += frameTimeStep;
-			frameTime %= 3600.0F;
+			frameTime %= 3600.0;
 			PrivateAccessor.setFrameTimeCounter(frameTime);
 		}
 	}

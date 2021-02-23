@@ -50,8 +50,8 @@ public class TimerModifier extends CaptureModule {
 			defaultTps = PrivateAccessor.getTimerTicksPerSecond(defaultTimer);
 		}
 
-		float fps = cfg.frameRate.get().floatValue();
-		float speed = cfg.engineSpeed.get().floatValue();
+		double fps = cfg.frameRate.get().doubleValue();
+		double speed = cfg.engineSpeed.get().doubleValue();
 
 		// set fixed delay timer
 		timer = new FixedTimer(defaultTps, fps, speed);

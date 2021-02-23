@@ -35,6 +35,7 @@ public abstract class FrameExporter {
 	}
 
 	public void destroy() throws Exception {
+		waitForLastExport();
 		exportService.shutdown();
 
 		try {
@@ -52,6 +53,7 @@ public abstract class FrameExporter {
 		try {
 			if (exportFuture != null) {
 				exportFuture.get();
+				exportFuture = null;
 			}
 		} catch (InterruptedException ex) {
 			// catch uncritical interruption exception
@@ -66,6 +68,7 @@ public abstract class FrameExporter {
 
 		// export frame in the background so that the next frame can be
 		// rendered in the meantime
+		
 		exportFuture = exportService.submit(() -> {
 			try {
 				doExportFrame(buffer);

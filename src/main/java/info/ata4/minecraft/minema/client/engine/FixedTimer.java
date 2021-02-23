@@ -9,6 +9,8 @@
  */
 package info.ata4.minecraft.minema.client.engine;
 
+import org.apache.logging.log4j.LogManager;
+
 import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.modules.SyncModule;
 //import info.ata4.minecraft.minema.client.modules.ShaderSync;
@@ -72,8 +74,10 @@ public class FixedTimer extends Timer {
 			SyncModule.onClientPreTick(1);
 		} else
 			ticks += timerSpeed * (ticksPerSecond / framesPerSecond);
-		elapsedTicks = (int) ticks;
+		elapsedTicks = (int) (float) ticks;
 		ticks -= elapsedTicks;
+		if (ticks < 1E-14)
+			ticks = 0;
 		renderPartialTicks = elapsedPartialTicks = (float) ticks;
 		
 		SyncModule.onClientPreTick(elapsedTicks); // Before client handle network message.
