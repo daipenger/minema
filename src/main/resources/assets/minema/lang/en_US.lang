@@ -107,6 +107,9 @@ minema.config.heldFrames.tooltip=This option allows you to hold a render frame f
 minema.config.useAlphaScreenshot=Screenshot alpha
 minema.config.useAlphaScreenshot.tooltip=Enable alpha in screenshots made by F2 keybind
 
+minema.config.exportAECamera=Export Keyframes of After Effects Camera 
+minema.config.exportAECamera.tooltip=Export frame data that can be pasted directly into After Effects, the coordinates in AE are the same as those in the game. Note: The option "Measure Film Size" of camera in After Effects should be set to "Vertically", and other 3D layers in After Effects need to be rotated 180 degrees around the X or Z axis.
+
 # config engine
 minema.config.engineSpeed=Engine Speed
 minema.config.engineSpeed.tooltip=Speed modifier for the game clock. The default is 1.0, which equals 20 ticks per second. Lower or higher values will speed up or slow down the game time. 2.5, for example, results in two and a half of the normal speed. Useful for slow motion or time lapse effects. Ignored if the capturing is unsynchronized.

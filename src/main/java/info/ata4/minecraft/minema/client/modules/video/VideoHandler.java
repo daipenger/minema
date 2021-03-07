@@ -16,6 +16,7 @@ import info.ata4.minecraft.minema.client.event.EndRenderEvent;
 import info.ata4.minecraft.minema.client.event.MidRenderEvent;
 import info.ata4.minecraft.minema.client.event.MinemaEventbus;
 import info.ata4.minecraft.minema.client.modules.CaptureModule;
+import info.ata4.minecraft.minema.client.modules.video.export.AfterEffectsFrameExporter;
 import info.ata4.minecraft.minema.client.modules.video.export.FrameExporter;
 import info.ata4.minecraft.minema.client.modules.video.export.ImageFrameExporter;
 import info.ata4.minecraft.minema.client.modules.video.export.PipeFrameExporter;
@@ -40,6 +41,8 @@ public class VideoHandler extends CaptureModule {
 	private int startWidth;
 	private int startHeight;
 	private boolean recordGui;
+	
+	private AfterEffectsFrameExporter aecamera = new AfterEffectsFrameExporter();
 
 	@Override
 	protected void doEnable() throws Exception {
@@ -86,10 +89,15 @@ public class VideoHandler extends CaptureModule {
 
 		MinemaEventbus.midRenderBUS.registerListener((e) -> onRenderMid(e));
 		MinemaEventbus.endRenderBUS.registerListener((e) -> onRenderEnd(e));
+		
+		aecamera.setName(this.colorName);
+		aecamera.enable();
 	}
 
 	@Override
 	protected void doDisable() throws Exception {
+		aecamera.disable();
+		
 		// Export Last Frame
 		if (colorReader.isPBO)
 			exportColor();

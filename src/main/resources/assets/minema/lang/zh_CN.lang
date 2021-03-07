@@ -107,6 +107,9 @@ minema.config.heldFrames.tooltip=该选项允许您在特定时间内保持一�
 minema.config.useAlphaScreenshot=截取 Alpha 通道
 minema.config.useAlphaScreenshot.tooltip=在按 F2 截图时启用 Alpha 通道信息
 
+minema.config.exportAECamera=导出After Effects摄像机关键帧
+minema.config.exportAECamera.tooltip=导出可直接粘贴至After Effects中的帧数据，AE中的坐标与游戏中相同。注意：AE摄像机的“量度胶片大小（Measure Film Size）”选项应设为“垂直”，且AE中的其他3D图层需要绕 X 轴或 Z 轴旋转180度。
+
 # config engine
 minema.config.engineSpeed=引擎速率
 minema.config.engineSpeed.tooltip=游戏时钟的速率修改器。默认值为 1.0，相当于每秒 20 Tick。更低或更高的值会加快或减慢游戏时间。例如，2.5，结果是正常速度的二分之一。对于慢动作或延时拍摄很有用。如果不启用捕获同步，此项将会被忽略。
