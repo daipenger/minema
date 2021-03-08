@@ -15,9 +15,16 @@ import static org.lwjgl.opengl.ARBBufferObject.glBindBufferARB;
 import static org.lwjgl.opengl.ARBBufferObject.glBufferDataARB;
 import static org.lwjgl.opengl.ARBBufferObject.glDeleteBuffersARB;
 import static org.lwjgl.opengl.ARBBufferObject.glGenBuffersARB;
+import static org.lwjgl.opengl.ARBBufferObject.glMapBufferARB;
+import static org.lwjgl.opengl.ARBBufferObject.glUnmapBufferARB;
 import static org.lwjgl.opengl.ARBPixelBufferObject.GL_PIXEL_PACK_BUFFER_ARB;
+import static org.lwjgl.opengl.GL11.GL_PACK_ALIGNMENT;
+import static org.lwjgl.opengl.GL11.GL_UNPACK_ALIGNMENT;
+import static org.lwjgl.opengl.GL11.glPixelStorei;
 
 import java.nio.ByteBuffer;
+
+import org.lwjgl.opengl.Util;
 
 import net.minecraft.client.Minecraft;
 
@@ -85,6 +92,21 @@ public abstract class CommonReader {
 			glDeleteBuffersARB(frontName);
 			glDeleteBuffersARB(backName);
 		}
+	}
+	
+	public boolean readLastFrame() {
+		if (isPBO) {
+			glBindBufferARB(PBO_TARGET, backName);
+			buffer = glMapBufferARB(PBO_TARGET, PBO_ACCESS, bufferSize, buffer);
+			glUnmapBufferARB(PBO_TARGET);
+			glBindBufferARB(PBO_TARGET, 0);
+			
+			Util.checkGLError();
+			
+			buffer.rewind();
+			return true;
+		}
+		return false;
 	}
 
 }

@@ -99,8 +99,10 @@ public class VideoHandler extends CaptureModule {
 		aecamera.disable();
 		
 		// Export Last Frame
-		if (colorReader.isPBO)
-			exportColor();
+		colorExport.waitForLastExport();
+		if (colorReader.readLastFrame()) {
+			colorExport.exportFrame(colorReader.buffer);
+		}
 		
 		colorReader.destroy();
 		colorExport.destroy();
@@ -109,24 +111,23 @@ public class VideoHandler extends CaptureModule {
 
 		if (depthReader == null)
 			return;
-		if (depthReader.isPBO) {
-			depthExport.waitForLastExport();
-			if (depthReader.readPixels()) {
-				ByteBuffer floats = depthReader.buffer;
 
-				while (floats.hasRemaining()) {
-					float f = floats.getFloat();
-					byte b = (byte) (linearizeDepth(f) * 255);
-					depthRemapping.put(b);
-					depthRemapping.put(b);
-					depthRemapping.put(b);
-				}
+		depthExport.waitForLastExport();
+		if (depthReader.readLastFrame()) {
+			ByteBuffer floats = depthReader.buffer;
 
-				floats.rewind();
-				depthRemapping.rewind();
-
-				depthExport.exportFrame(depthRemapping);
+			while (floats.hasRemaining()) {
+				float f = floats.getFloat();
+				byte b = (byte) (linearizeDepth(f) * 255);
+				depthRemapping.put(b);
+				depthRemapping.put(b);
+				depthRemapping.put(b);
 			}
+
+			floats.rewind();
+			depthRemapping.rewind();
+
+			depthExport.exportFrame(depthRemapping);
 		}
 		depthReader.destroy();
 		depthExport.destroy();

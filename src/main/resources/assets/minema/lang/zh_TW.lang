@@ -108,7 +108,7 @@ minema.config.useAlphaScreenshot=截取 Alpha 通道
 minema.config.useAlphaScreenshot.tooltip=在按 F2 截圖時啟用 Alpha 通道信息
 
 minema.config.exportAECamera=匯出After Effects攝像機關鍵幀
-minema.config.exportAECamera.tooltip=匯出可直接粘貼至After Effects中的幀數據，AE中的座標與遊戲中相同。注意：AE攝像機的“量度膠片大小（Measure Film Size）”選項應設為“垂直”，且AE中的其他3D圖層需要繞X軸或Z軸旋轉180度。
+minema.config.exportAECamera.tooltip=匯出可直接粘貼至After Effects中的單節點攝像機幀數據，AE中的座標與遊戲中相同。注意：AE攝像機的“量度膠片大小（Measure Film Size）”選項應設為“垂直”，且AE中的其他3D圖層需要繞X軸或Z軸旋轉180度。
 
 # config engine
 minema.config.engineSpeed=引擎速率
