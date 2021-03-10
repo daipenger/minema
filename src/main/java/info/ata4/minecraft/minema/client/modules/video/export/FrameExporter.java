@@ -7,6 +7,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import info.ata4.minecraft.minema.Minema;
+import info.ata4.minecraft.minema.client.modules.modifiers.TimerModifier;
+import net.minecraft.client.Minecraft;
 //import info.ata4.minecraft.minema.client.modules.ShaderSync;
 import net.minecraft.client.resources.I18n;
 import org.apache.logging.log4j.LogManager;

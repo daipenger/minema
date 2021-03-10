@@ -14,6 +14,7 @@ public class MinemaEventbus<X> {
 
 	public static final MinemaEventbus<MidRenderEvent> midRenderBUS = new MinemaEventbus<>();
 	public static final MinemaEventbus<EndRenderEvent> endRenderBUS = new MinemaEventbus<>();
+	public static final MinemaEventbus<AfterCameraEvent> cameraBUS = new MinemaEventbus<>();
 
 	private final ArrayList<IEventListener<X>> listeners;
 
@@ -49,6 +50,7 @@ public class MinemaEventbus<X> {
 	public static void reset() {
 		midRenderBUS.listeners.clear();
 		endRenderBUS.listeners.clear();
+		cameraBUS.listeners.clear();
 	}
 
 }

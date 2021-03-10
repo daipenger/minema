@@ -40,6 +40,9 @@ public class FixedTimer extends Timer {
 		timerSpeed = speed;
 
 		held = Math.max(1, Minema.instance.getConfig().heldFrames.get());
+		frames = 0;
+		canRecord = true;
+		
 		ticks = -1;
 	}
 
@@ -49,6 +52,22 @@ public class FixedTimer extends Timer {
 
 	@Override
 	public void updateTimer() {
+		if (canRecord) {
+			// First frame have a server tick
+			if (ticks < 0) {
+				ticks = 0;
+				SyncModule.onClientPreTick(1);
+			} else
+				ticks += timerSpeed * (ticksPerSecond / framesPerSecond);
+			elapsedTicks = (int) (float) ticks;
+			ticks -= elapsedTicks;
+			if (ticks < 1E-14)
+				ticks = 0;
+			renderPartialTicks = elapsedPartialTicks = (float) ticks;
+			
+			SyncModule.onClientPreTick(elapsedTicks); // Before client handle network message.
+		}
+		
 		canRecord = false;
 		frames += 1;
 
@@ -59,28 +78,14 @@ public class FixedTimer extends Timer {
 
 			frames = 0;
 			canRecord = true;
-		} else {
+		} else if (frames > 1){
 //			if (held > 1) {
 //				ShaderSync.freeze(true);
 //			}
 
 			elapsedTicks = 0;
-			return;
 		}
 
-		// First frame have a server tick
-		if (ticks < 0) {
-			ticks = 0;
-			SyncModule.onClientPreTick(1);
-		} else
-			ticks += timerSpeed * (ticksPerSecond / framesPerSecond);
-		elapsedTicks = (int) (float) ticks;
-		ticks -= elapsedTicks;
-		if (ticks < 1E-14)
-			ticks = 0;
-		renderPartialTicks = elapsedPartialTicks = (float) ticks;
-		
-		SyncModule.onClientPreTick(elapsedTicks); // Before client handle network message.
 	}
 
 	public void setSpeed(double speed) {

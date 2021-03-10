@@ -16,6 +16,7 @@ import info.ata4.minecraft.minema.client.event.EndRenderEvent;
 import info.ata4.minecraft.minema.client.event.MidRenderEvent;
 import info.ata4.minecraft.minema.client.event.MinemaEventbus;
 import info.ata4.minecraft.minema.client.modules.CaptureModule;
+import info.ata4.minecraft.minema.client.modules.modifiers.TimerModifier;
 import info.ata4.minecraft.minema.client.modules.video.export.AfterEffectsFrameExporter;
 import info.ata4.minecraft.minema.client.modules.video.export.FrameExporter;
 import info.ata4.minecraft.minema.client.modules.video.export.ImageFrameExporter;
@@ -143,6 +144,9 @@ public class VideoHandler extends CaptureModule {
 
 	private void onRenderMid(MidRenderEvent e) throws Exception {
 		checkDimensions();
+		
+		if (!TimerModifier.canRecord())
+			return;
 
 		if (depthReader != null) {
 			depthExport.waitForLastExport();
@@ -186,6 +190,9 @@ public class VideoHandler extends CaptureModule {
 
 	private void onRenderEnd(EndRenderEvent e) throws Exception {
 		checkDimensions();
+		
+		if (!TimerModifier.canRecord())
+			return;
 
 		if (recordGui || ShadersHelper.usingShaders()) {
 			exportColor();

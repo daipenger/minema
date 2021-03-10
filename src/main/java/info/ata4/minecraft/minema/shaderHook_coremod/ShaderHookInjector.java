@@ -120,6 +120,19 @@ public final class ShaderHookInjector implements IClassTransformer {
 						}
 					}
 				}
+				
+				iterator = m.instructions.iterator();
+				while (iterator.hasNext()) {
+					AbstractInsnNode currentNode = iterator.next();
+					
+					if (currentNode instanceof MethodInsnNode) {
+						MethodInsnNode mnode = (MethodInsnNode) currentNode;
+						if (mnode.name.equals("a") && mnode.desc.equals("(FI)V") && mnode.owner.equals("buq")) {
+							iterator.add(new MethodInsnNode(Opcodes.INVOKESTATIC, "info/ata4/minecraft/minema/CaptureSession", "ASMAfterCamera", "()V", false));
+							break;
+						}
+					}
+				}
 			}
 		}
 	}

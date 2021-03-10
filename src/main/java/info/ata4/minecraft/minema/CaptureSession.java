@@ -1,6 +1,7 @@
 package info.ata4.minecraft.minema;
 
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
+import info.ata4.minecraft.minema.client.event.AfterCameraEvent;
 import info.ata4.minecraft.minema.client.event.EndRenderEvent;
 import info.ata4.minecraft.minema.client.event.MidRenderEvent;
 import info.ata4.minecraft.minema.client.event.MinemaEventbus;
@@ -192,4 +193,11 @@ public class CaptureSession {
 		singleton.execFrameEvent(MinemaEventbus.midRenderBUS, new MidRenderEvent(singleton));
 	}
 
+	/**
+	 * Called by ASM hook
+	 */
+	public static void ASMAfterCamera() {
+		singleton.execFrameEvent(MinemaEventbus.cameraBUS, new AfterCameraEvent(singleton));
+	}
+	
 }

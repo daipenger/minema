@@ -19,6 +19,8 @@ import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import info.ata4.minecraft.minema.client.event.MinemaEventbus;
 import info.ata4.minecraft.minema.client.modules.CaptureModule;
+import info.ata4.minecraft.minema.client.modules.modifiers.TimerModifier;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraftforge.client.event.EntityViewRenderEvent;
@@ -53,12 +55,10 @@ public class AfterEffectsFrameExporter extends CaptureModule {
 	private ArrayList<Vector3d> position;
 	
 	private int height;
-	private EntityViewRenderEvent.CameraSetup lastCamera;
 	
 	@Override
 	protected void doEnable() throws Exception {
-		MinecraftForge.EVENT_BUS.register(this);
-		MinemaEventbus.endRenderBUS.registerListener(e -> this.onRenderEnd());
+		MinemaEventbus.cameraBUS.registerListener(e -> this.afterCamera());
 		
 		MinemaConfig cfg = Minema.instance.getConfig();
 		String filename = this.filename == null || this.filename.isEmpty() ? new SimpleDateFormat("yyyy-MM-dd_HH.mm.ss").format(new Date()) : this.filename;
@@ -82,8 +82,6 @@ public class AfterEffectsFrameExporter extends CaptureModule {
 
 	@Override
 	protected void doDisable() throws Exception {
-		MinecraftForge.EVENT_BUS.unregister(this);
-		
 		fw.println("Camera Options\tZoom");
 		fw.println("\tFrame");
 		for (int i = 0; i < zoom.size(); i++)
@@ -105,34 +103,27 @@ public class AfterEffectsFrameExporter extends CaptureModule {
 		zoom = null;
 		orientation = null;
 		position = null;
+		filename = null;
 	}
 	
-	@SubscribeEvent
-    public void onCameraOrient(EntityViewRenderEvent.CameraSetup event) {
-		this.lastCamera = event;
+	public void afterCamera() {
+		if (!this.isEnabled() || !TimerModifier.canRecord())
+			return;
+		
 		updateMVP();
-	}
-	
-	public void onRenderEnd() {
+		
 		zoom.add(height / 2.0 * projection.m11);
 		
 		Matrix4d mat = modelview;
 		Matrix4d trans = new Matrix4d();
-		trans.rotZ(Math.toRadians(lastCamera.getRoll()));
-		mat.mul(trans);
-		trans.rotX(Math.toRadians(lastCamera.getPitch()));
-		mat.mul(trans);
-		trans.rotY(Math.toRadians(lastCamera.getYaw()));
-		mat.mul(trans);
 		
-		Entity entity = lastCamera.getEntity();
+		Minecraft mc = Minecraft.getMinecraft();
 		
-		double f = entity.getEyeHeight();
-		if (entity instanceof EntityLivingBase && ((EntityLivingBase)entity).isPlayerSleeping())
-			f += 1D;
-		double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * lastCamera.getRenderPartialTicks();
-		double y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * lastCamera.getRenderPartialTicks() + f;
-		double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * lastCamera.getRenderPartialTicks();
+		Entity entity = mc.getRenderViewEntity();
+
+		double x = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * mc.getRenderPartialTicks();
+		double y = entity.lastTickPosY + (entity.posY - entity.lastTickPosY) * mc.getRenderPartialTicks();
+		double z = entity.lastTickPosZ + (entity.posZ - entity.lastTickPosZ) * mc.getRenderPartialTicks();
 
 		trans.setIdentity();
 		trans.setTranslation(new Vector3d(-x, -y, -z));
