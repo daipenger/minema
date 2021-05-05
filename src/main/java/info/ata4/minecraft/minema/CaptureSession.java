@@ -86,7 +86,7 @@ public class CaptureSession {
 			Minecraft MC = Minecraft.getMinecraft();
 			MinemaConfig cfg = Minema.instance.getConfig();
 
-			frameLimit = cfg.frameLimit.get();
+			frameLimit = cfg.getFrameLimit();
 			captureDir = Paths.get(cfg.capturePath.get());
 
 			if (!Files.exists(captureDir)) {
@@ -115,7 +115,7 @@ public class CaptureSession {
 
 			MinecraftForge.EVENT_BUS.register(this);
 
-			time = new CaptureTime(cfg.frameRate.get());
+			time = new CaptureTime(cfg.getFrameRate());
 		} catch (Exception e) {
 			stopCapture();
 

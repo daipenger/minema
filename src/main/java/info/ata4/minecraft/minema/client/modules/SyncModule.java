@@ -85,7 +85,7 @@ public class SyncModule extends CaptureModule {
 	@Override
 	protected void doEnable() throws Exception {
 		MinemaConfig cfg = Minema.instance.getConfig();
-		float fps = cfg.frameRate.get().floatValue();
+		float fps = (float) cfg.getFrameRate();
 		float speed = cfg.engineSpeed.get().floatValue();
 		frameTime = PrivateAccessor.getFrameTimeCounter();
 		frameTimeStep = speed / fps;

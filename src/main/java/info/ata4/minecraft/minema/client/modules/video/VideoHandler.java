@@ -63,11 +63,11 @@ public class VideoHandler extends CaptureModule {
 
 		customName = null;
 		colorReader = new ColorbufferReader(startWidth, startHeight, usePBO, useFBO, Minema.instance.getConfig().useAlpha.get());
-		colorExport = usePipe ? new PipeFrameExporter() : new ImageFrameExporter();
+		colorExport = usePipe ? new PipeFrameExporter(true) : new ImageFrameExporter();
 
 		if (recordDepth) {
 			depthReader = new DepthbufferReader(startWidth, startHeight, usePBO, useFBO);
-			depthExport = usePipe ? new PipeFrameExporter() : new ImageFrameExporter();
+			depthExport = usePipe ? new PipeFrameExporter(false) : new ImageFrameExporter();
 			depthRemapping = ByteBuffer.allocateDirect(startWidth * startHeight * 3);
 			depthRemapping.rewind();
 		}

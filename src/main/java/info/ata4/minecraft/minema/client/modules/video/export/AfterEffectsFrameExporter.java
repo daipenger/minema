@@ -65,7 +65,7 @@ public class AfterEffectsFrameExporter extends CaptureModule {
 		filename += ".keyframes.txt";
 		fw = new PrintStream(new FileOutputStream(new File(CaptureSession.singleton.getCaptureDir().toFile(), filename)), true, "ASCII");
 		fw.println("Adobe After Effects 8.0 Keyframe Data");
-		fw.println(String.format("\tUnits Per Second\t%.2f", cfg.frameRate.get().doubleValue()));
+		fw.println(String.format("\tUnits Per Second\t%.2f", cfg.getFrameRate()));
 		fw.println(String.format("\tSource Width\t%d", cfg.getFrameWidth()));
 		fw.println(String.format("\tSource Height\t%d", height = cfg.getFrameHeight()));
 		fw.println("\tSource Pixel Aspect Ratio\t1");

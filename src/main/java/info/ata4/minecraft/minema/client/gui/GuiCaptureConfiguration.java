@@ -5,6 +5,8 @@ import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.MinemaAPI;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import info.ata4.minecraft.minema.client.modules.video.VideoHandler;
+import info.ata4.minecraft.minema.util.config.ConfigDouble;
+import info.ata4.minecraft.minema.util.config.ConfigInteger;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -82,11 +84,12 @@ public class GuiCaptureConfiguration extends GuiScreen {
 
     public void saveConfigValues() {
         MinemaConfig cfg = Minema.instance.getConfig();
-        cfg.frameWidth.set(this.parseInt(this.videoWidth.getText(), cfg.frameWidth.get()));
-        cfg.frameHeight.set(this.parseInt(this.videoHeight.getText(), cfg.frameHeight.get()));
-        cfg.frameRate.set(this.parseDouble(this.frameRate.getText(), cfg.frameRate.get()));
-        cfg.frameLimit.set(this.parseInt(this.frameLimit.getText(), cfg.frameLimit.get()));
-        cfg.engineSpeed.set(this.parseDouble(this.engineSpeed.getText(), cfg.engineSpeed.get()));
+        cfg.frameWidth.set(this.parseInt(this.videoWidth.getText(), cfg.frameWidth));
+        cfg.frameHeight.set(this.parseInt(this.videoHeight.getText(), cfg.frameHeight));
+        cfg.frameRate.set(this.parseDouble(this.frameRate.getText(), cfg.frameRate));
+        cfg.frameLimit.set(this.parseInt(this.frameLimit.getText(), cfg.frameLimit));
+        cfg.engineSpeed.set(this.parseDouble(this.engineSpeed.getText(), cfg.engineSpeed));
+        cfg.getConfigForge().save();
     }
 
     @Override
@@ -120,19 +123,29 @@ public class GuiCaptureConfiguration extends GuiScreen {
         }
     }
 
-    private double parseDouble(String text, double orDefault) {
+    private double parseDouble(String text, ConfigDouble conf) {
         try {
-            return Double.parseDouble(text);
+            double rtn = Double.parseDouble(text);
+            if (conf.getMax() != null)
+            	rtn = Math.min(rtn, conf.getMax());
+            if (conf.getMin() != null)
+            	rtn = Math.max(rtn, conf.getMin());
+            return rtn;
         } catch (Exception e) {
-            return orDefault;
+            return conf.get();
         }
     }
 
-    private int parseInt(String text, int orDefault) {
+    private int parseInt(String text, ConfigInteger conf) {
         try {
-            return Integer.parseInt(text);
+            int rtn = Integer.parseInt(text);
+            if (conf.getMax() != null)
+            	rtn = Math.min(rtn, conf.getMax());
+            if (conf.getMin() != null)
+            	rtn = Math.max(rtn, conf.getMin());
+            return rtn;
         } catch (Exception e) {
-            return orDefault;
+            return conf.get();
         }
     }
 

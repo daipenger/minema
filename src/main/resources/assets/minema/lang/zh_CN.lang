@@ -15,6 +15,7 @@ minema.error.ffmpeg_not_exists=在指定路径 '%s' 下找不到 ffmpeg！请指
 minema.error.ffmpeg_error=可能是由于没有权限，无法导出视频到 '%s'，或是指定编码器路径 '%s' 无法执行（没有权限执行此文件）或是此文件不是 ffmpeg！请指定其他捕获或编码器（ffmpeg）路径！"
 minema.error.export_frame=无法输出帧 %s
 minema.error.size_change=显示大小发生改变！当前大小: %dx%d 起始大小: %dx%d
+minema.error.require_defvf=旧版编码器参数无法使用运动模糊，请将编码器参数重置为默认值。
 
 # GUI
 minema.gui.title=视频录制配置
@@ -56,10 +57,10 @@ minema.config.videoEncoderPath=编码器路径
 minema.config.videoEncoderPath.tooltip=视频编码可执行文件的路径。编码器的输出的目录是自动生成的影片文件夹。如果视频编码器被禁用，此项将会被忽略。
 
 minema.config.videoEncoderParams=编码器参数
-minema.config.videoEncoderParams.tooltip=视频编码程序的参数。占位符：%%WIDTH%% - 帧宽度，%%HEIGHT%% - 帧高度，%%FPS%% - 帧率。%%NAME%% - 要使用的视频文件名。如果视频编码器被禁用，此项将会被忽略。
+minema.config.videoEncoderParams.tooltip=视频编码程序的参数。占位符：%%WIDTH%% - 帧宽度，%%HEIGHT%% - 帧高度，%%FPS%% - 帧率。%%NAME%% - 要使用的视频文件名。%%DEFVF%% - 默认视频过滤器。如果视频编码器被禁用，此项将会被忽略。
 
 minema.config.videoEncoderParamsAlpha=编码器参数（Alpha）
-minema.config.videoEncoderParamsAlpha.tooltip=启用“使用 Alpha 通道”选项时的视频编码程序的参数。占位符与前者相同。对于 PNG 序列，您可以使用 "-f rawvideo -pix_fmt rgb32 -s %%WIDTH%%x%%HEIGHT%% -r %%FPS%% -i - -vf vflip %%NAME%%_%%d.png"。
+minema.config.videoEncoderParamsAlpha.tooltip=启用“使用 Alpha 通道”选项时的视频编码程序的参数。占位符与前者相同。对于 PNG 序列，您可以使用 "-f rawvideo -pix_fmt rgb32 -s %%WIDTH%%x%%HEIGHT%% -r %%FPS%% -i - -vf %%DEFVF%% %%NAME%%_%%d.png"。
 
 minema.config.snapResolution=对齐分辨率
 minema.config.snapResolution.tooltip=如果必要的话，请将录制分辨率切换到下一个较低的分辨率，这样宽度和高度就可以被该模数整除。FFMpeg 只需要 mod2，其他的编码器可能要更高一些。
@@ -75,7 +76,7 @@ minema.config.frameHeight=帧高度
 minema.config.frameHeight.tooltip=每次捕获帧的高度，单位为像素。设置为 0 则会应用当前窗口/屏幕的宽度。非零值需要帧缓冲区支持，并与您的 GPU 的最大纹理分辨率绑定。
 
 minema.config.frameRate=帧率
-minema.config.frameRate.tooltip=录制帧率，设置游戏内每秒记录的帧数。允许使用小数，例如：24p NTSC 的 23.976。由于 Minecraft 是以每秒 20 次为单位运行的，建议使用 20 的倍数的帧率来获得最佳的流畅度。
+minema.config.frameRate.tooltip=录制帧率，设置游戏内每秒记录的帧数。允许使用小数，例如：24p NTSC 的 23.976。由于 Minecraft 是以每秒 20 次为单位运行的，建议使用 20 的倍数的帧率来获得最佳的流畅度。开启运动模糊后，帧率高低与模糊大小呈反比。
 
 minema.config.frameLimit=帧数上限
 minema.config.frameLimit.tooltip=在自动停止前录制要捕获的帧数。-1 表示没有限制。
@@ -109,6 +110,9 @@ minema.config.useAlphaScreenshot.tooltip=在按 F2 截图时启用 Alpha 通道�
 
 minema.config.exportAECamera=导出After Effects摄像机关键帧
 minema.config.exportAECamera.tooltip=导出可直接粘贴至After Effects中的单节点摄像机帧数据，AE中的坐标与游戏中相同。注意：AE摄像机的“量度胶片大小（Measure Film Size）”选项应设为“垂直”，且AE中的其他3D图层需要绕 X 轴或 Z 轴旋转180度。
+
+minema.config.motionBlurLevel=运动模糊
+minema.config.motionBlurLevel.tooltip=基于ffmpeg的运动模糊特效，仅在启用视频编码后可用。模糊质量越高，渲染时间越长，且渲染时间呈指数增长，仅推荐在运动量极大的镜头中使用High和Ultra。
 
 # config engine
 minema.config.engineSpeed=引擎速率

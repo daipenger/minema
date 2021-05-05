@@ -12,6 +12,7 @@ package info.ata4.minecraft.minema.client.modules.video.export;
 import info.ata4.minecraft.minema.CaptureSession;
 import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
+import info.ata4.minecraft.minema.client.config.MotionBlur;
 import info.ata4.minecraft.minema.client.modules.modifiers.TimerModifier;
 import info.ata4.minecraft.minema.client.util.CaptureTime;
 import info.ata4.minecraft.minema.client.util.MinemaException;
@@ -41,6 +42,11 @@ public class PipeFrameExporter extends FrameExporter {
 
 	private Process proc;
 	private WritableByteChannel pipe;
+	private boolean isColor;
+
+	public PipeFrameExporter(boolean isColor) {
+		this.isColor = isColor;
+	}
 
 	@Override
 	protected void doExportFrame(ByteBuffer buffer) throws Exception {
@@ -63,11 +69,17 @@ public class PipeFrameExporter extends FrameExporter {
 			throw new MinemaException(I18n.format("minema.error.ffmpeg_not_exists", ffmpeg));
 		}
 
-		String params = cfg.useAlpha.get() ? cfg.videoEncoderParamsAlpha.get() : cfg.videoEncoderParams.get();
+		String params = this.isColor && cfg.useAlpha.get() ? cfg.videoEncoderParamsAlpha.get() : cfg.videoEncoderParams.get();
 		params = params.replace("%WIDTH%", String.valueOf(width));
 		params = params.replace("%HEIGHT%", String.valueOf(height));
-		params = params.replace("%FPS%", String.valueOf(cfg.frameRate.get()));
+		params = params.replace("%FPS%", String.valueOf(cfg.getFrameRate()));
 		params = params.replace("%NAME%", movieName);
+		String defvf = "vflip";
+		if (cfg.motionBlurLevel.get() != MotionBlur.DISABLE && !params.contains("%DEFVF%"))
+			throw new MinemaException(I18n.format("minema.error.require_defvf"));
+		for (int i = 0; i < cfg.motionBlurLevel.get().getExp(); i++)
+			defvf += ",tblend=all_mode=average,framestep=2";
+		params = params.replace("%DEFVF%", defvf);
 
 		List<String> cmds = new ArrayList<>();
 		cmds.add(ffmpeg);

@@ -15,6 +15,7 @@ minema.error.ffmpeg_not_exists=ffmpeg wasn't found at given path '%s'! Specify t
 minema.error.ffmpeg_error=Either cannot export video to '%s' due to not having permission, or given encoder path '%s' is not executable (no permissions to execute this file) or it's not ffmpeg! Please specify another capture or encoder (ffmpeg) path!"
 minema.error.export_frame=Can't export frame %s
 minema.error.size_change=Display size changed! Current: %dx%d Start: %dx%d
+minema.error.require_defvf=Motion blur is not available with the old encoder parameters, please reset the encoder parameters to their default values.
 
 # GUI
 minema.gui.title=Video recording configuration
@@ -109,6 +110,9 @@ minema.config.useAlphaScreenshot.tooltip=Enable alpha in screenshots made by F2 
 
 minema.config.exportAECamera=Export Keyframes of After Effects Camera 
 minema.config.exportAECamera.tooltip=Export frame data of One-Node Camera that can be pasted directly into After Effects, the coordinates in AE are the same as those in the game. Note: The option "Measure Film Size" of camera in After Effects should be set to "Vertically", and other 3D layers in After Effects need to be rotated 180 degrees around the X or Z axis.
+
+minema.config.motionBlurLevel=Motion Blur
+minema.config.motionBlurLevel.tooltip=Motion blur effect based on ffmpeg, only available when video encoding is enabled. The higher the quality of the blur, the longer and more exponential the rendering time, High and Ultra are only recommended for footage with a lot of motion.
 
 # config engine
 minema.config.engineSpeed=Engine Speed

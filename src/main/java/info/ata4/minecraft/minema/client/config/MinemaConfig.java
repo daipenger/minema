@@ -48,11 +48,12 @@ public class MinemaConfig {
 	public final ConfigBoolean useVideoEncoder = new ConfigBoolean(true);
 	public final ConfigString videoEncoderPath = new ConfigString("ffmpeg");
 	public final ConfigString videoEncoderParams = new ConfigString(
-			"-f rawvideo -pix_fmt bgr24 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%.mp4");
+			"-f rawvideo -pix_fmt bgr24 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf %DEFVF% -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%.mp4");
 	public final ConfigString videoEncoderParamsAlpha = new ConfigString(
-			"-f rawvideo -pix_fmt rgb32 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf vflip -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%_rgb.mp4 -vf vflip,alphaextract,format=yuv420p %NAME%_alpha.mp4");
+			"-f rawvideo -pix_fmt rgb32 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf %DEFVF% -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%_rgb.mp4 -vf alphaextract,%DEFVF%,format=yuv420p %NAME%_alpha.mp4");
 	public final ConfigEnum<SnapResolution> snapResolution = new ConfigEnum<>(SnapResolution.MOD2);
 	public final ConfigBoolean enableEncoderLogging = new ConfigBoolean(true);
+	public final ConfigEnum<MotionBlur> motionBlurLevel = new ConfigEnum<>(MotionBlur.DISABLE);
 
 	public final ConfigInteger frameWidth = new ConfigInteger(0, 0, MAX_TEXTURE_SIZE);
 	public final ConfigInteger frameHeight = new ConfigInteger(0, 0, MAX_TEXTURE_SIZE);
@@ -114,6 +115,7 @@ public class MinemaConfig {
 		heldFrames.link(cfg, CAPTURING_CATEGORY, "heldFrames", LANG_KEY);
 		useAlphaScreenshot.link(cfg, CAPTURING_CATEGORY, "useAlphaScreenshot", LANG_KEY);
 		exportAECamera.link(cfg, CAPTURING_CATEGORY, "exportAECamera", LANG_KEY);
+		motionBlurLevel.link(cfg, CAPTURING_CATEGORY, "motionBlurLevel", LANG_KEY);
 
 		engineSpeed.link(cfg, ENGINE_CATEGORY, "engineSpeed", LANG_KEY);
 		syncEngine.link(cfg, ENGINE_CATEGORY, "syncEngine", LANG_KEY);
@@ -165,6 +167,14 @@ public class MinemaConfig {
 
 	public boolean useFrameSize() {
 		return getFrameWidth() != Display.getWidth() || getFrameHeight() != Display.getHeight();
+	}
+	
+	public double getFrameRate() {
+		return frameRate.get() * (useVideoEncoder.get() ? 1 << motionBlurLevel.get().getExp() : 1);
+	}
+	
+	public int getFrameLimit() {
+		return frameLimit.get() * (useVideoEncoder.get() ? 1 << motionBlurLevel.get().getExp() : 1);
 	}
 
 }

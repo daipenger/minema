@@ -95,7 +95,7 @@ public abstract class CommonReader {
 	}
 	
 	public boolean readLastFrame() {
-		if (isPBO) {
+		if (isPBO && !firstFrame) {
 			glBindBufferARB(PBO_TARGET, backName);
 			buffer = glMapBufferARB(PBO_TARGET, PBO_ACCESS, bufferSize, buffer);
 			glUnmapBufferARB(PBO_TARGET);
