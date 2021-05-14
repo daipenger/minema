@@ -170,11 +170,11 @@ public class MinemaConfig {
 	}
 	
 	public double getFrameRate() {
-		return frameRate.get() * (useVideoEncoder.get() ? 1 << motionBlurLevel.get().getExp() : 1);
+		return frameRate.get() * (useVideoEncoder.get() ? 1 << motionBlurLevel.get().getExp(frameRate.get()) : 1);
 	}
 	
 	public int getFrameLimit() {
-		return frameLimit.get() * (useVideoEncoder.get() ? 1 << motionBlurLevel.get().getExp() : 1);
+		return frameLimit.get() * (useVideoEncoder.get() ? 1 << motionBlurLevel.get().getExp(frameRate.get()) : 1);
 	}
 
 }

@@ -77,7 +77,7 @@ public class PipeFrameExporter extends FrameExporter {
 		String defvf = "vflip";
 		if (cfg.motionBlurLevel.get() != MotionBlur.DISABLE && !params.contains("%DEFVF%"))
 			throw new MinemaException(I18n.format("minema.error.require_defvf"));
-		for (int i = 0; i < cfg.motionBlurLevel.get().getExp(); i++)
+		for (int i = 0; i < cfg.motionBlurLevel.get().getExp(cfg.frameRate.get()); i++)
 			defvf += ",tblend=all_mode=average,framestep=2";
 		params = params.replace("%DEFVF%", defvf);
 

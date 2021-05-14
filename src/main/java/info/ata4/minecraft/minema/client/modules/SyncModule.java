@@ -34,6 +34,11 @@ public class SyncModule extends CaptureModule {
 			PrivateAccessor.setFrameTimeCounter(frameTime);
 		}
 	}
+
+	// Called by ASM from EntityTrackerEntry & NetHandlerPlayClient
+	public static int getUpdateFrequency(int origin) {
+		return instance != null && instance.isEnabled() ? 1 : origin;
+	}
 	
 	private static int syncTicks = 0; // 0 or 1
 	private static Lock lock = new ReentrantLock();

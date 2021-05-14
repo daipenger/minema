@@ -39,14 +39,18 @@ public final class ShaderHookInjector implements IClassTransformer {
 	private static final String minecraftServer = "net.minecraft.server.MinecraftServer";
 	private static final String screenshotHelper = "net.minecraft.util.ScreenShotHelper";
 	private static final String glStateManager = "net.minecraft.client.renderer.GlStateManager";
-
+	private static final String entityTrackerEntry = "net.minecraft.entity.EntityTrackerEntry";
+	private static final String netHandlerPlayClient = "net.minecraft.client.network.NetHandlerPlayClient";
+	
 	@Override
 	public byte[] transform(final String obfuscated, final String deobfuscated, final byte[] bytes) {
 		// "Deobfuscated" is always passed as a deobfuscated argument, but the
 		// "obfuscated" argument may be deobfuscated or obfuscated
 		if (entityRenderer.equals(deobfuscated) || minecraftServer.equals(deobfuscated)
 				|| screenshotHelper.equals(deobfuscated)
-				|| glStateManager.equals(deobfuscated)) {
+				|| glStateManager.equals(deobfuscated)
+				|| entityTrackerEntry.equals(deobfuscated)
+				|| netHandlerPlayClient.equals(deobfuscated)) {
 
 			final ClassReader classReader = new ClassReader(bytes);
 			final ClassNode classNode = new ClassNode();
@@ -62,6 +66,10 @@ public final class ShaderHookInjector implements IClassTransformer {
 				this.transformScreenshotHelper(classNode, isInAlreadyDeobfuscatedState);
 			} else if (glStateManager.equals(deobfuscated)) {
 				this.transformGlStateManager(classNode, isInAlreadyDeobfuscatedState);
+			} else if (entityTrackerEntry.equals(deobfuscated)) {
+				this.transformEntityTrackerEntry(classNode, isInAlreadyDeobfuscatedState);
+			} else if (netHandlerPlayClient.equals(deobfuscated)) {
+				this.transformNetHandlerPlayClient(classNode, isInAlreadyDeobfuscatedState);
 			}
 
 			final ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS);
@@ -312,6 +320,64 @@ public final class ShaderHookInjector implements IClassTransformer {
 					list.add(methodInvoke);
 
 					method.instructions.insert(invokeNode, list);
+				}
+			}
+		}
+	}
+
+	private void transformEntityTrackerEntry(ClassNode classNode, boolean isInAlreadyDeobfuscatedState) {
+		String m = isInAlreadyDeobfuscatedState ? "updatePlayerList" : "a";
+		String c = isInAlreadyDeobfuscatedState ? "net/minecraft/entity/EntityTrackerEntry" : "os";
+		String f = isInAlreadyDeobfuscatedState ? "updateFrequency" : "g";
+		for (MethodNode method : classNode.methods) {
+			if (method.desc.equals("(Ljava/util/List;)V") && method.name.equals(m)) {
+				AbstractInsnNode target = null;
+				Iterator<AbstractInsnNode> it = method.instructions.iterator();
+
+				while (it.hasNext())
+				{
+					AbstractInsnNode node = it.next();
+					if (node.getOpcode() == Opcodes.GETFIELD) {
+						FieldInsnNode fnode = (FieldInsnNode) node;
+						if (fnode.owner.equals(c) && fnode.name.equals(f)) {
+							target = node;
+							break;
+						}
+					}
+				}
+				
+				if (target != null)
+				{
+					AbstractInsnNode node = new MethodInsnNode(Opcodes.INVOKESTATIC, "info/ata4/minecraft/minema/client/modules/SyncModule", "getUpdateFrequency", "(I)I", false);
+					method.instructions.insert(target, node);
+					return;
+				}
+			}
+		}
+	}
+
+	private void transformNetHandlerPlayClient(ClassNode classNode, boolean isInAlreadyDeobfuscatedState) {
+		String m1 = isInAlreadyDeobfuscatedState ? "handleEntityMovement(Lnet/minecraft/network/play/server/SPacketEntity;)V" : "a(Ljj;)V";
+		String m2 = isInAlreadyDeobfuscatedState ? "handleEntityTeleport(Lnet/minecraft/network/play/server/SPacketEntityTeleport;)V" : "a(Lkt;)V";
+		for (MethodNode method : classNode.methods) {
+			String m = method.name + method.desc;
+			if (m.equals(m1) || m.equals(m2)) {
+				AbstractInsnNode target = null;
+				Iterator<AbstractInsnNode> it = method.instructions.iterator();
+
+				while (it.hasNext())
+				{
+					AbstractInsnNode node = it.next();
+					if (node.getOpcode() == Opcodes.ICONST_3) {
+						target = node;
+						break;
+					}
+				}
+				
+				if (target != null)
+				{
+					AbstractInsnNode node = new MethodInsnNode(Opcodes.INVOKESTATIC, "info/ata4/minecraft/minema/client/modules/SyncModule", "getUpdateFrequency", "(I)I", false);
+					method.instructions.insert(target, node);
 				}
 			}
 		}
