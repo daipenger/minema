@@ -16,6 +16,9 @@ minema.error.ffmpeg_error=可能是由于没有权限，无法导出视频到 '%
 minema.error.export_frame=无法输出帧 %s
 minema.error.size_change=显示大小发生改变！当前大小: %dx%d 起始大小: %dx%d
 minema.error.require_defvf=旧版编码器参数无法使用运动模糊，请将编码器参数重置为默认值。
+minema.error.vr_not_support=当前设备不支持VR视频导出功能
+minema.error.file_exists=文件 %s 已存在，无法导出
+minema.error.vr_broken=视频 '%s' 写入VR视频元数据失败，文件可能已损坏。
 
 # GUI
 minema.gui.title=视频录制配置
@@ -48,6 +51,9 @@ minema.config.capturing.tooltip=视频录制设置。
 
 minema.config.engine=引擎覆盖
 minema.config.engine.tooltip=录制时应用的高级引擎覆盖设置。
+
+minema.config.vr=VR视频（测试特性）
+minema.config.vr.tooltip=暂不兼容深度通道、AE关键帧导出。
 
 # config encoding
 minema.config.useVideoEncoder=启用视频编码
@@ -127,5 +133,14 @@ minema.config.preloadChunks.tooltip=启用后，Minema 会在录制过程中大�
 minema.config.forcePreloadChunks=强制区块预加载
 minema.config.forcePreloadChunks.tooltip=在启用了区块预加载，同时也启用本功能，那么渲染距离内的所有区块都会被预加载。此项仅在本地世界才会起效！
 
-minema.config.networkDelay=主动通信延迟
-minema.config.networkDelay.tooltip=在执行完服务端Tick后主动延迟一段时间再执行客户端Tick，从而保证客户端Tick执行前所有来自服务端的数据包全部都已被处理
+minema.config.disableCulling=禁用屏幕外区块剔除
+minema.config.disableCulling.tooltip=强制游戏渲染屏幕外区块，导出VR时会自动启用。
+
+# vr video
+minema.config.enableVR=导出VR视频
+
+minema.config.injectMetadata=写入VR元数据
+minema.config.injectMetadata.tooltip=向 MP4 格式的 VR 视频写入 VR 元数据，如果导出的 VR 视频总是损坏，请关闭此功能。
+
+minema.config.vrSSRSupport=屏幕空间特效兼容
+minema.config.vrSSRSupport.tooltip=通过预留上下屏幕空间来保证屏幕空间特效的正确渲染，但是会显著降低画质。

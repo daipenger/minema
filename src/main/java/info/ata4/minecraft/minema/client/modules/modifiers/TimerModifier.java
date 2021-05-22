@@ -13,6 +13,7 @@ import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import info.ata4.minecraft.minema.client.engine.FixedTimer;
 import info.ata4.minecraft.minema.client.modules.CaptureModule;
+import info.ata4.minecraft.minema.client.modules.video.vr.CubeFace;
 import info.ata4.minecraft.minema.util.reflection.PrivateAccessor;
 import net.minecraft.util.Timer;
 
@@ -29,8 +30,16 @@ public class TimerModifier extends CaptureModule {
 		return timer;
 	}
 
+	public static boolean isFirstFrame() {
+		return timer == null || timer.isFirstFrame();
+	}
+	
 	public static boolean canRecord() {
 		return timer == null || timer.canRecord();
+	}
+	
+	public static CubeFace getCubeFace() {
+		return timer == null ? null : CubeFace.values()[timer.getCubeFace()];
 	}
 
 	@Override

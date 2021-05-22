@@ -139,7 +139,7 @@ public class VideoHandler extends CaptureModule {
 
 	@Override
 	protected boolean checkEnable() {
-		return true;
+		return !Minema.instance.getConfig().vr.get();
 	}
 
 	private void onRenderMid(MidRenderEvent e) throws Exception {

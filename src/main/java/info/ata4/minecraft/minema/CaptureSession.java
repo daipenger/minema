@@ -15,6 +15,7 @@ import info.ata4.minecraft.minema.client.modules.SyncModule;
 import info.ata4.minecraft.minema.client.modules.modifiers.DisplaySizeModifier;
 import info.ata4.minecraft.minema.client.modules.modifiers.GameSettingsModifier;
 import info.ata4.minecraft.minema.client.modules.modifiers.TimerModifier;
+import info.ata4.minecraft.minema.client.modules.video.VRVideoHandler;
 import info.ata4.minecraft.minema.client.modules.video.VideoHandler;
 import info.ata4.minecraft.minema.client.util.CaptureTime;
 import info.ata4.minecraft.minema.client.util.MinemaException;
@@ -39,9 +40,9 @@ public class CaptureSession {
 
 	public static final CaptureSession singleton = new CaptureSession();
 
-	private final CaptureModule[] modules = new CaptureModule[] { new GameSettingsModifier(), new SyncModule(), /*new ShaderSync(),*/
-			new TimerModifier(), /*new TickSynchronizer(),*/ new ChunkPreloader(), new DisplaySizeModifier(),
-			new VideoHandler(), new CaptureOverlay(), new CaptureNotification() };
+	private final CaptureModule[] modules = new CaptureModule[] { new GameSettingsModifier(), new ChunkPreloader(), 
+			new SyncModule(), new TimerModifier(), /*new TickSynchronizer(),*/ new DisplaySizeModifier(),
+			new VideoHandler(), new VRVideoHandler(), new CaptureOverlay(), new CaptureNotification() };
 
 	private Path captureDir;
 	private CaptureTime time;

@@ -16,6 +16,9 @@ minema.error.ffmpeg_error=Either cannot export video to '%s' due to not having p
 minema.error.export_frame=Can't export frame %s
 minema.error.size_change=Display size changed! Current: %dx%d Start: %dx%d
 minema.error.require_defvf=Motion blur is not available with the old encoder parameters, please reset the encoder parameters to their default values.
+minema.error.vr_not_support=Device does not support VR video export
+minema.error.file_exists=File %s already exists and cannot be exported.
+minema.error.vr_broken=Failed to write VR video metadata to file '%s', file may be broken.
 
 # GUI
 minema.gui.title=Video recording configuration
@@ -48,6 +51,9 @@ minema.config.capturing.tooltip=Settings for video recording.
 
 minema.config.engine=Engine Overrides
 minema.config.engine.tooltip=Advanced engine override settings used during recording.
+
+minema.config.vr=VR视频（测试特性）
+minema.config.vr.tooltip=暂不兼容深度通道、AE关键帧导出。
 
 # config encoding
 minema.config.useVideoEncoder=Use Video Encoder
@@ -129,3 +135,17 @@ minema.config.forcePreloadChunks.tooltip=If Preload Chunks is enabled and this i
 
 minema.config.networkDelay=Delay for thread packets
 minema.config.networkDelay.tooltip=Sleep the client thread for receive and handle all server thread packets.
+
+minema.config.disableCulling=Disable Frustum Culling
+minema.config.disableCulling.tooltip=Force the game to render off screen chunks. This option will be automatically enabled when exporting VR.
+
+# vr video
+minema.config.enableVR=Export VR video
+
+minema.config.injectMetadata=Inject VR Metadata
+minema.config.objectMetadata.tooltip=Inject VR metadata to MP4 format VR video, turn off this option if the exported VR video is always broken.
+
+minema.config.vrSSRSupport=Screen Space Effects Compatible
+minema.config.vrSSRSupport.tooltip=Ensure proper rendering of screen space effects by reserving upper and lower screen space, but it will significantly degrade the image quality.
+
+Translated with www.DeepL.com/Translator (free version)

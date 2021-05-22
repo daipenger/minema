@@ -12,7 +12,7 @@ package info.ata4.minecraft.minema.client.modules.video.export;
 import info.ata4.minecraft.minema.CaptureSession;
 import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
-import info.ata4.minecraft.minema.client.config.MotionBlur;
+import info.ata4.minecraft.minema.client.config.enums.MotionBlur;
 import info.ata4.minecraft.minema.client.modules.modifiers.TimerModifier;
 import info.ata4.minecraft.minema.client.util.CaptureTime;
 import info.ata4.minecraft.minema.client.util.MinemaException;

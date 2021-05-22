@@ -9,11 +9,14 @@
  */
 package info.ata4.minecraft.minema.client.config;
 
+import info.ata4.minecraft.minema.client.config.enums.MotionBlur;
+import info.ata4.minecraft.minema.client.config.enums.SnapResolution;
 import info.ata4.minecraft.minema.util.config.ConfigBoolean;
 import info.ata4.minecraft.minema.util.config.ConfigDouble;
 import info.ata4.minecraft.minema.util.config.ConfigEnum;
 import info.ata4.minecraft.minema.util.config.ConfigInteger;
 import info.ata4.minecraft.minema.util.config.ConfigString;
+import info.ata4.minecraft.minema.util.config.ConfigValue;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.common.config.ConfigCategory;
@@ -40,6 +43,7 @@ public class MinemaConfig {
 	private final ConfigCategory ENCODING_CATEGORY;
 	private final ConfigCategory CAPTURING_CATEGORY;
 	private final ConfigCategory ENGINE_CATEGORY;
+	private final ConfigCategory VR_CATEGORY;
 
 	public final File dummyLog;
 
@@ -53,7 +57,6 @@ public class MinemaConfig {
 			"-f rawvideo -pix_fmt rgb32 -s %WIDTH%x%HEIGHT% -r %FPS% -i - -vf %DEFVF% -c:v libx264 -preset ultrafast -tune zerolatency -qp 18 -pix_fmt yuv420p %NAME%_rgb.mp4 -vf alphaextract,%DEFVF%,format=yuv420p %NAME%_alpha.mp4");
 	public final ConfigEnum<SnapResolution> snapResolution = new ConfigEnum<>(SnapResolution.MOD2);
 	public final ConfigBoolean enableEncoderLogging = new ConfigBoolean(true);
-	public final ConfigEnum<MotionBlur> motionBlurLevel = new ConfigEnum<>(MotionBlur.DISABLE);
 
 	public final ConfigInteger frameWidth = new ConfigInteger(0, 0, MAX_TEXTURE_SIZE);
 	public final ConfigInteger frameHeight = new ConfigInteger(0, 0, MAX_TEXTURE_SIZE);
@@ -69,13 +72,19 @@ public class MinemaConfig {
 	public final ConfigInteger heldFrames = new ConfigInteger(1, 1, 100);
 	public final ConfigBoolean useAlphaScreenshot = new ConfigBoolean(false);
 	public final ConfigBoolean exportAECamera = new ConfigBoolean(false);
+	public final ConfigEnum<MotionBlur> motionBlurLevel = new ConfigEnum<>(MotionBlur.DISABLE);
 
-	public final ConfigDouble engineSpeed = new ConfigDouble(1.0, 0.01, 100.0);
+	public final ConfigDouble engineSpeed = new ConfigDouble(1.0, 0.01, 1200.0);
 	public final ConfigBoolean syncEngine = new ConfigBoolean(true);
 	public final ConfigBoolean preloadChunks = new ConfigBoolean(true);
 	public final ConfigBoolean forcePreloadChunks = new ConfigBoolean(false);
-	public final ConfigInteger networkDelay = new ConfigInteger(20, 0, Integer.MAX_VALUE);
+	public final ConfigBoolean disableCulling = new ConfigBoolean(false);
+//	public final ConfigInteger networkDelay = new ConfigInteger(20, 0, Integer.MAX_VALUE);
 
+	public final ConfigBoolean vr = new ConfigBoolean(false);
+	public final ConfigBoolean vrMetadata = new ConfigBoolean(true);
+	public final ConfigBoolean vrSSRSupport = new ConfigBoolean(false);
+	
 	public MinemaConfig(File path) {
 		Configuration cfg = new Configuration(path);
 
@@ -85,9 +94,10 @@ public class MinemaConfig {
 		ENCODING_CATEGORY = cfg.getCategory("encoding");
 		CAPTURING_CATEGORY = cfg.getCategory("capturing");
 		ENGINE_CATEGORY = cfg.getCategory("engine");
+		VR_CATEGORY = cfg.getCategory("vr");
 
 		for (ConfigCategory category : new ConfigCategory[] { ENCODING_CATEGORY, CAPTURING_CATEGORY,
-				ENGINE_CATEGORY }) {
+				ENGINE_CATEGORY, VR_CATEGORY }) {
 			String langKey = LANG_KEY + "." + category.getName();
 			String comment = WordUtils.wrap(I18n.format(langKey + ".tooltip"), 128);
 			category.setLanguageKey(langKey);
@@ -121,7 +131,14 @@ public class MinemaConfig {
 		syncEngine.link(cfg, ENGINE_CATEGORY, "syncEngine", LANG_KEY);
 		preloadChunks.link(cfg, ENGINE_CATEGORY, "preloadChunks", LANG_KEY);
 		forcePreloadChunks.link(cfg, ENGINE_CATEGORY, "forcePreloadChunks", LANG_KEY);
-		networkDelay.link(cfg, ENGINE_CATEGORY, "networkDelay", LANG_KEY);
+		disableCulling.link(cfg, ENGINE_CATEGORY, "disableCulling", LANG_KEY);
+		
+		vr.link(cfg, VR_CATEGORY, "enableVR", LANG_KEY);
+		vrMetadata.link(cfg, VR_CATEGORY, "injectMetadata", LANG_KEY);
+		vrSSRSupport.link(cfg, VR_CATEGORY, "vrSSRSupport", LANG_KEY);
+		
+		ConfigValue.clearUnlinkedProps();
+		cfg.save();
 	}
 
 	public Configuration getConfigForge() {
@@ -130,10 +147,13 @@ public class MinemaConfig {
 
 	public List<IConfigElement> getCategoryElements() {
 		return Arrays.asList(new ConfigElement(ENCODING_CATEGORY), new ConfigElement(CAPTURING_CATEGORY),
-				new ConfigElement(ENGINE_CATEGORY));
+				new ConfigElement(ENGINE_CATEGORY), new ConfigElement(VR_CATEGORY));
 	}
 
 	public int getFrameWidth() {
+		if (vr.get())
+			return getFrameHeight() * 2;
+		
 		int width = frameWidth.get();
 
 		// use display width if not set
@@ -161,6 +181,9 @@ public class MinemaConfig {
 		if (useVideoEncoder.get()) {
 			height = snapResolution.get().snap(height);
 		}
+		
+		if (vr.get())
+			height = height - (height % (vrSSRSupport.get() ? 6 : 2));
 
 		return height;
 	}

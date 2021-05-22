@@ -10,7 +10,12 @@
 package info.ata4.minecraft.minema.util.config;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import org.apache.commons.lang3.text.WordUtils;
@@ -25,6 +30,18 @@ import net.minecraftforge.common.config.Property;
  * @author Nico Bergemann <barracuda415 at yahoo.de>
  */
 public abstract class ConfigValue<T> {
+	
+	private static final Map<ConfigCategory, Set<String>> linked = new HashMap<>();
+	
+	public static void clearUnlinkedProps() {
+		for (Map.Entry<ConfigCategory, Set<String>> entry : linked.entrySet()) {
+			ConfigCategory category = entry.getKey();
+			Iterator<String> it = category.keySet().iterator();
+			while (it.hasNext())
+				if (!entry.getValue().contains(it.next()))
+					it.remove();
+		}
+	}
 
 	private final T valueDefault;
 	private Supplier<Property> propSupplier;
@@ -57,6 +74,10 @@ public abstract class ConfigValue<T> {
 		newOrder.addAll(immutableOrder);
 		newOrder.add(category.getName() + "." + propName);
 		category.setPropertyOrder(newOrder);
+		
+		if (linked.get(category) == null)
+			linked.put(category, new HashSet<>());
+		linked.get(category).add(propName);
 	}
 
 	protected abstract Property.Type getPropType();

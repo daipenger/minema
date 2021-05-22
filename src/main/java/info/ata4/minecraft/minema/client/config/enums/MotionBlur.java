@@ -1,4 +1,4 @@
-package info.ata4.minecraft.minema.client.config;
+package info.ata4.minecraft.minema.client.config.enums;
 
 public enum MotionBlur {
 	  DISABLE(0), POTATO(128), LOW(512), MEDIUM(1024), HIGH(4096), ULTRA(8192);
