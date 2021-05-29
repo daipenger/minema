@@ -3,9 +3,9 @@
   "modid": "minema",
   "name": "Minema",
   "description": "This mod allows you to record fluid movies in Minecraft, even if the video recording itself is not.",
-  "version": "3.5.4 TickSync Unofficial Mod Version",
+  "version": "${version}-TickSync",
   "mcversion": "1.12.2",
   "url": "https://github.com/daipenger/minema",
-  "authorList": ["Barracuda","Gregosteros", "mchorse", "TickSync By NyaNLI"]
+  "authorList": ["Barracuda","Gregosteros", "mchorse"]
 }
 ]

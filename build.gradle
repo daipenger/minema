@@ -16,7 +16,7 @@ plugins {
 apply plugin: 'net.minecraftforge.gradle.forge'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
-version = "3.5.4"
+version = "3.5.5"
 
 if (project.hasProperty("dev")) {
     version += "-dev" + dev
