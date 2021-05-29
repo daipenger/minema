@@ -34,7 +34,7 @@ public class ConfigEnum<T extends Enum<T>> extends ConfigValue<T> {
 	}
 
 	private String enumToString(T e) {
-		return e.name().toUpperCase();
+		return e.name().toLowerCase();
 	}
 
 	private T stringToEnum(String name) {

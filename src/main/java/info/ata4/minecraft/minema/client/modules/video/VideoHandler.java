@@ -12,16 +12,17 @@ import org.lwjgl.opengl.GLContext;
 import info.ata4.minecraft.minema.CaptureSession;
 import info.ata4.minecraft.minema.Minema;
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
+import info.ata4.minecraft.minema.client.event.CameraTransformedEvent;
 import info.ata4.minecraft.minema.client.event.EndRenderEvent;
 import info.ata4.minecraft.minema.client.event.MidRenderEvent;
 import info.ata4.minecraft.minema.client.event.MinemaEventbus;
 import info.ata4.minecraft.minema.client.modules.CaptureModule;
 import info.ata4.minecraft.minema.client.modules.modifiers.TimerModifier;
-import info.ata4.minecraft.minema.client.modules.video.export.AfterEffectsFrameExporter;
+import info.ata4.minecraft.minema.client.modules.tracker.BaseTracker;
 import info.ata4.minecraft.minema.client.modules.video.export.FrameExporter;
 import info.ata4.minecraft.minema.client.modules.video.export.ImageFrameExporter;
 import info.ata4.minecraft.minema.client.modules.video.export.PipeFrameExporter;
-import info.ata4.minecraft.minema.util.reflection.ShadersHelper;
+import info.ata4.minecraft.minema.util.reflection.PrivateAccessor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
 
@@ -42,8 +43,6 @@ public class VideoHandler extends CaptureModule {
 	private int startWidth;
 	private int startHeight;
 	private boolean recordGui;
-	
-	private AfterEffectsFrameExporter aecamera = new AfterEffectsFrameExporter();
 
 	@Override
 	protected void doEnable() throws Exception {
@@ -61,6 +60,7 @@ public class VideoHandler extends CaptureModule {
 		boolean usePipe = cfg.useVideoEncoder.get();
 		boolean recordDepth = cfg.captureDepth.get();
 
+		CaptureSession.singleton.setFilename(colorName);
 		customName = null;
 		colorReader = new ColorbufferReader(startWidth, startHeight, usePBO, useFBO, Minema.instance.getConfig().useAlpha.get());
 		colorExport = usePipe ? new PipeFrameExporter(true) : new ImageFrameExporter();
@@ -90,14 +90,10 @@ public class VideoHandler extends CaptureModule {
 
 		MinemaEventbus.midRenderBUS.registerListener((e) -> onRenderMid(e));
 		MinemaEventbus.endRenderBUS.registerListener((e) -> onRenderEnd(e));
-		
-		aecamera.setName(this.colorName);
-		aecamera.enable();
 	}
 
 	@Override
 	protected void doDisable() throws Exception {
-		aecamera.disable();
 		
 		// Export Last Frame
 		colorExport.waitForLastExport();
@@ -168,7 +164,7 @@ public class VideoHandler extends CaptureModule {
 			}
 		}
 
-		if (!recordGui && !ShadersHelper.usingShaders()) {
+		if (!recordGui && !PrivateAccessor.isShaderPackLoaded()) {
 			exportColor();
 
 			e.session.getTime().nextFrame();
@@ -194,7 +190,7 @@ public class VideoHandler extends CaptureModule {
 		if (!TimerModifier.canRecord())
 			return;
 
-		if (recordGui || ShadersHelper.usingShaders()) {
+		if (recordGui || PrivateAccessor.isShaderPackLoaded()) {
 			exportColor();
 
 			e.session.getTime().nextFrame();

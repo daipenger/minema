@@ -1,7 +1,7 @@
 package info.ata4.minecraft.minema;
 
 import info.ata4.minecraft.minema.client.config.MinemaConfig;
-import info.ata4.minecraft.minema.client.event.AfterCameraEvent;
+import info.ata4.minecraft.minema.client.event.CameraTransformedEvent;
 import info.ata4.minecraft.minema.client.event.EndRenderEvent;
 import info.ata4.minecraft.minema.client.event.MidRenderEvent;
 import info.ata4.minecraft.minema.client.event.MinemaEventbus;
@@ -15,11 +15,11 @@ import info.ata4.minecraft.minema.client.modules.SyncModule;
 import info.ata4.minecraft.minema.client.modules.modifiers.DisplaySizeModifier;
 import info.ata4.minecraft.minema.client.modules.modifiers.GameSettingsModifier;
 import info.ata4.minecraft.minema.client.modules.modifiers.TimerModifier;
+import info.ata4.minecraft.minema.client.modules.tracker.AfterEffectsTracker;
 import info.ata4.minecraft.minema.client.modules.video.VRVideoHandler;
 import info.ata4.minecraft.minema.client.modules.video.VideoHandler;
 import info.ata4.minecraft.minema.client.util.CaptureTime;
 import info.ata4.minecraft.minema.client.util.MinemaException;
-import info.ata4.minecraft.minema.util.reflection.ShadersHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.text.TextFormatting;
@@ -42,13 +42,15 @@ public class CaptureSession {
 
 	private final CaptureModule[] modules = new CaptureModule[] { new GameSettingsModifier(), new ChunkPreloader(), 
 			new SyncModule(), new TimerModifier(), /*new TickSynchronizer(),*/ new DisplaySizeModifier(),
-			new VideoHandler(), new VRVideoHandler(), new CaptureOverlay(), new CaptureNotification() };
+			new VideoHandler(), new VRVideoHandler(), new CaptureOverlay(), new CaptureNotification(),
+			new AfterEffectsTracker()};
 
 	private Path captureDir;
 	private CaptureTime time;
 	private int frameLimit;
 	private boolean isEnabled;
 	private boolean isRecording;
+	private String filename;
 
 	private CaptureSession() {
 	}
@@ -154,6 +156,14 @@ public class CaptureSession {
 	public CaptureTime getTime() {
 		return time;
 	}
+	
+	public String getFilename() {
+		return filename;
+	}
+	
+	public void setFilename(String name) {
+		filename = name;
+	}
 
 	private <X> void execFrameEvent(MinemaEventbus<X> bus, X event) {
 		if (isEnabled) {
@@ -198,7 +208,7 @@ public class CaptureSession {
 	 * Called by ASM hook
 	 */
 	public static void ASMAfterCamera() {
-		singleton.execFrameEvent(MinemaEventbus.cameraBUS, new AfterCameraEvent(singleton));
+		singleton.execFrameEvent(MinemaEventbus.cameraBUS, new CameraTransformedEvent(singleton));
 	}
 	
 }

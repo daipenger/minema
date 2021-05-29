@@ -52,7 +52,7 @@ minema.config.capturing.tooltip=视频录制设置。
 minema.config.engine=引擎覆盖
 minema.config.engine.tooltip=录制时应用的高级引擎覆盖设置。
 
-minema.config.vr=VR视频（测试特性）
+minema.config.vr=360度全景视频（测试特性）
 minema.config.vr.tooltip=暂不兼容深度通道、AE关键帧导出。
 
 # config encoding
@@ -137,10 +137,10 @@ minema.config.disableCulling=禁用屏幕外区块剔除
 minema.config.disableCulling.tooltip=强制游戏渲染屏幕外区块，导出VR时会自动启用。
 
 # vr video
-minema.config.enableVR=导出VR视频
+minema.config.enableVR=导出全景视频
 
-minema.config.injectMetadata=写入VR元数据
-minema.config.injectMetadata.tooltip=向 MP4 格式的 VR 视频写入 VR 元数据，如果导出的 VR 视频总是损坏，请关闭此功能。
+minema.config.injectMetadata=写入全景视频元数据
+minema.config.injectMetadata.tooltip=向 MP4 格式的全景视频写入元数据以便于播放器与视频网站识别视频格式，如果导出的全景视频总是损坏，请关闭此功能。
 
 minema.config.vrSSRSupport=屏幕空间特效兼容
 minema.config.vrSSRSupport.tooltip=通过预留上下屏幕空间来保证屏幕空间特效的正确渲染，但是会显著降低画质。

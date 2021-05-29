@@ -31,6 +31,7 @@ public final class PrivateAccessor {
 	private static Optional<Field> Shaders_frameTimeCounter;
 	private static Optional<Field> ofLazyChunkLoading;
 	private static Optional<Field> ofChunkUpdates;
+	private static Optional<Field> ofShaderPackLoaded;
 	private static void lateLoadOptifineField() {
 		if (Shaders_frameTimeCounter == null) {
 			Shaders_frameTimeCounter = Optional.ofNullable(getAccessibleField("net.optifine.shaders.Shaders", "frameTimeCounter"));
@@ -40,6 +41,9 @@ public final class PrivateAccessor {
 		}
 		if (ofChunkUpdates == null) {
 			ofChunkUpdates = Optional.ofNullable(getAccessibleField(GameSettings.class, "ofChunkUpdates"));
+		}
+		if (ofShaderPackLoaded == null) {
+			ofShaderPackLoaded = Optional.ofNullable(getAccessibleField("net.optifine.shaders.Shaders", "shaderPackLoaded"));
 		}
 	}
 
@@ -200,6 +204,18 @@ public final class PrivateAccessor {
 			} catch (IllegalArgumentException | IllegalAccessException e) {
 			}
 		}
+	}
+	
+	public static boolean isShaderPackLoaded() {
+		lateLoadOptifineField();
+
+		if (ofShaderPackLoaded.isPresent()) {
+			try {
+				return ofShaderPackLoaded.get().getBoolean(null);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+			}
+		}
+		return false;
 	}
 
 	/*

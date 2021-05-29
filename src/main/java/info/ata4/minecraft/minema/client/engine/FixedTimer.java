@@ -52,7 +52,7 @@ public class FixedTimer extends Timer {
 		held = Math.max(1, Minema.instance.getConfig().heldFrames.get());
 		frames = 0;
 		canOutput = true;
-		canRecord = true;
+		canRecord = false;
 		vr = Minema.instance.getConfig().vr.get();
 		vrCount = 0;
 		

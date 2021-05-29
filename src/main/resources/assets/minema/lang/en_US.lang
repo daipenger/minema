@@ -52,8 +52,8 @@ minema.config.capturing.tooltip=Settings for video recording.
 minema.config.engine=Engine Overrides
 minema.config.engine.tooltip=Advanced engine override settings used during recording.
 
-minema.config.vr=VR视频（测试特性）
-minema.config.vr.tooltip=暂不兼容深度通道、AE关键帧导出。
+minema.config.vr=Equirectangular Panoramic Video (Test Feature)
+minema.config.vr.tooltip=It is not compatible with depth channel and AE keyframe export for now.
 
 # config encoding
 minema.config.useVideoEncoder=Use Video Encoder
@@ -140,12 +140,10 @@ minema.config.disableCulling=Disable Frustum Culling
 minema.config.disableCulling.tooltip=Force the game to render off screen chunks. This option will be automatically enabled when exporting VR.
 
 # vr video
-minema.config.enableVR=Export VR video
+minema.config.enableVR=Export Panoramic Video
 
-minema.config.injectMetadata=Inject VR Metadata
-minema.config.objectMetadata.tooltip=Inject VR metadata to MP4 format VR video, turn off this option if the exported VR video is always broken.
+minema.config.injectMetadata=Inject Spherical Metadata
+minema.config.objectMetadata.tooltip=Inject spherical metadata to MP4 format panoramic video in order to facilitate the player and video website to identify the video format, turn off this option if the exported panoramic video is always broken.
 
 minema.config.vrSSRSupport=Screen Space Effects Compatible
 minema.config.vrSSRSupport.tooltip=Ensure proper rendering of screen space effects by reserving upper and lower screen space, but it will significantly degrade the image quality.
-
-Translated with www.DeepL.com/Translator (free version)

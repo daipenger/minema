@@ -29,7 +29,7 @@ import info.ata4.minecraft.minema.client.modules.video.export.PipeFrameExporter;
 import info.ata4.minecraft.minema.client.modules.video.vr.CubeFace;
 import info.ata4.minecraft.minema.client.modules.video.vr.Mp4SphericalInjector;
 import info.ata4.minecraft.minema.client.util.MinemaException;
-import info.ata4.minecraft.minema.util.reflection.ShadersHelper;
+import info.ata4.minecraft.minema.util.reflection.PrivateAccessor;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.resources.I18n;
@@ -45,7 +45,6 @@ public class VRVideoHandler extends CaptureModule {
 	
 	private static float SCALEFOV = 112.619865f; // atan(1.5)
 	
-	private static VRVideoHandler instance;
 	private static int program = -1;
 	
 	static {
@@ -121,8 +120,6 @@ public class VRVideoHandler extends CaptureModule {
 	
 	@Override
 	protected void doEnable() throws Exception {
-		instance = this;
-
 		MinemaConfig cfg = Minema.instance.getConfig();
 		ssr = cfg.vrSSRSupport.get();
 		
@@ -144,6 +141,7 @@ public class VRVideoHandler extends CaptureModule {
 		boolean useFBO = OpenGlHelper.isFramebufferEnabled();
 		boolean usePipe = cfg.useVideoEncoder.get();
 		
+		CaptureSession.singleton.setFilename(this.colorName);
 		VideoHandler.customName = null;
 		colorReader = new ColorbufferReader(startWidth, startHeight, usePBO, useFBO, Minema.instance.getConfig().useAlpha.get());
 		colorExport = usePipe ? new PipeFrameExporter(true) : new ImageFrameExporter();
@@ -298,7 +296,7 @@ public class VRVideoHandler extends CaptureModule {
 	private void onRenderMid(MidRenderEvent e) throws Exception {
 		checkDimensions();
 
-		if (!recordGui && !ShadersHelper.usingShaders()) {
+		if (!recordGui && !PrivateAccessor.isShaderPackLoaded()) {
 			if (exportColor())
 				e.session.getTime().nextFrame();
 		}
@@ -307,7 +305,7 @@ public class VRVideoHandler extends CaptureModule {
 	private void onRenderEnd(EndRenderEvent e) throws Exception {
 		checkDimensions();
 
-		if (recordGui || ShadersHelper.usingShaders()) {
+		if (recordGui || PrivateAccessor.isShaderPackLoaded()) {
 			if (exportColor())
 				e.session.getTime().nextFrame();
 		}
