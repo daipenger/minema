@@ -1,17 +1,17 @@
 package info.ata4.minecraft.minema.util.reflection;
 
+import java.io.File;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Optional;
 import java.util.Queue;
-import java.util.Set;
 import java.util.concurrent.FutureTask;
 
 import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ChunkProviderClient;
 import net.minecraft.client.renderer.EntityRenderer;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.Timer;
 
@@ -28,11 +28,24 @@ public final class PrivateAccessor {
 	
 	// These classes might not be able to be loaded by the JVM at this point
 	// (Mod classes of which the corresponding mod is not yet loaded)
+	private static Boolean shaderpackSupport;
 	private static Optional<Field> Shaders_frameTimeCounter;
 	private static Optional<Field> ofLazyChunkLoading;
 	private static Optional<Field> ofChunkUpdates;
 	private static Optional<Field> ofShaderPackLoaded;
+	private static Optional<Field> ofShaderPacksDir;
+	private static Optional<Field> ofCurrentShaderName;
+	private static Optional<Method> ofSetShaderPack;
+	private static Optional<Method> ofUninit;
 	private static void lateLoadOptifineField() {
+		if (shaderpackSupport == null) {
+			try {
+				Class.forName("net.optifine.shaders.Shaders");
+				shaderpackSupport = true;
+			} catch (ClassNotFoundException e) {
+				shaderpackSupport = false;
+			}
+		}
 		if (Shaders_frameTimeCounter == null) {
 			Shaders_frameTimeCounter = Optional.ofNullable(getAccessibleField("net.optifine.shaders.Shaders", "frameTimeCounter"));
 		}
@@ -44,6 +57,18 @@ public final class PrivateAccessor {
 		}
 		if (ofShaderPackLoaded == null) {
 			ofShaderPackLoaded = Optional.ofNullable(getAccessibleField("net.optifine.shaders.Shaders", "shaderPackLoaded"));
+		}
+		if (ofShaderPacksDir == null) {
+			ofShaderPacksDir = Optional.ofNullable(getAccessibleField("net.optifine.shaders.Shaders", "shaderPacksDir"));
+		}
+		if (ofCurrentShaderName == null) {
+			ofCurrentShaderName = Optional.ofNullable(getAccessibleField("net.optifine.shaders.Shaders", "currentShaderName"));
+		}
+		if (ofSetShaderPack == null) {
+			ofSetShaderPack = Optional.ofNullable(getPublicMethod("net.optifine.shaders.Shaders", "setShaderPack", String.class));
+		}
+		if (ofUninit == null) {
+			ofUninit = Optional.ofNullable(getPublicMethod("net.optifine.shaders.Shaders", "uninit"));
 		}
 	}
 
@@ -217,6 +242,57 @@ public final class PrivateAccessor {
 		}
 		return false;
 	}
+	
+	public static boolean isShaderPackSupported() {
+		lateLoadOptifineField();
+		return shaderpackSupport;
+	}
+	
+	public static File getShaderPacksDir() {
+		lateLoadOptifineField();
+		
+		if (ofShaderPacksDir.isPresent()) {
+			try {
+				return (File) ofShaderPacksDir.get().get(null);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+			}
+		}
+		return null;
+	}
+	
+	public static String getCurrentShaderName() {
+		lateLoadOptifineField();
+		
+		if (ofCurrentShaderName.isPresent()) {
+			try {
+				return (String) ofCurrentShaderName.get().get(null);
+			} catch (IllegalArgumentException | IllegalAccessException e) {
+			}
+		}
+		return "";
+	}
+	
+	public static void setShaderPack(String name) {
+		lateLoadOptifineField();
+		
+		if (ofSetShaderPack.isPresent()) {
+			try {
+				ofSetShaderPack.get().invoke(null, name);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			}
+		}
+	}
+	
+	public static void uninitShaderPack() {
+		lateLoadOptifineField();
+		
+		if (ofUninit.isPresent()) {
+			try {
+				ofUninit.get().invoke(null);
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			}
+		}
+	}
 
 	/*
 	 * Utility methods
@@ -239,6 +315,15 @@ public final class PrivateAccessor {
 		try {
 			return getAccessibleField(Class.forName(clazz), names);
 		} catch (ClassNotFoundException e) {
+			return null;
+		}
+	}
+	
+	private static Method getPublicMethod(String className, String name, Class<?>...args) {
+		try {
+			Class<?> clazz = Class.forName(className);
+			return clazz.getMethod(name, args);
+		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException e) {
 			return null;
 		}
 	}

@@ -24,6 +24,8 @@ minema.error.vr_broken=Failed to write VR video metadata to file '%s', file may 
 minema.gui.title=Video recording configuration
 minema.gui.movies_folder=Movies Folder
 minema.gui.record=Record...
+minema.gui.select_shaderpack=Set current shaderpack for recording
+minema.gui.clear_shaderpack=Clear shaderpack for recording
 
 minema.gui.name=Output name
 minema.gui.width=Width
@@ -138,6 +140,9 @@ minema.config.networkDelay.tooltip=Sleep the client thread for receive and handl
 
 minema.config.disableCulling=Disable Frustum Culling
 minema.config.disableCulling.tooltip=Force the game to render off screen chunks. This option will be automatically enabled when exporting VR.
+
+minema.config.shaderpack=Shaderpack for Recording
+minema.config.shaderpack.tooltip=Automatically switch to this shaderpack when recording.
 
 # vr video
 minema.config.enableVR=Export Panoramic Video

@@ -24,6 +24,8 @@ minema.error.vr_broken=视频 '%s' 写入VR视频元数据失败，文件可能�
 minema.gui.title=视频录制配置
 minema.gui.movies_folder=影片文件夹
 minema.gui.record=录制...
+minema.gui.select_shaderpack=设置当前光影为录制用光影
+minema.gui.clear_shaderpack=清除录制用光影
 
 minema.gui.name=输出文件名
 minema.gui.width=宽度
@@ -135,6 +137,9 @@ minema.config.forcePreloadChunks.tooltip=在启用了区块预加载，同时也
 
 minema.config.disableCulling=禁用屏幕外区块剔除
 minema.config.disableCulling.tooltip=强制游戏渲染屏幕外区块，导出VR时会自动启用。
+
+minema.config.shaderpack=录制用光影
+minema.config.shaderpack.tooltip=当录制时自动切换至此光影。
 
 # vr video
 minema.config.enableVR=导出全景视频

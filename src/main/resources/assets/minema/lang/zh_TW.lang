@@ -24,6 +24,8 @@ minema.error.vr_broken=視頻 '%s' 寫入VR視頻中繼資料失敗，檔案可�
 minema.gui.title=視頻錄制配置
 minema.gui.movies_folder=影片文件夾
 minema.gui.record=錄制...
+minema.gui.select_shaderpack=設定當前光影為錄製用光影
+minema.gui.clear_shaderpack=清除錄製用光影
 
 minema.gui.name=輸出文件名
 minema.gui.width=寬度
@@ -135,6 +137,9 @@ minema.config.forcePreloadChunks.tooltip=在啟用了區塊預加載，同時也
 
 minema.config.disableCulling=禁用荧幕外區塊剔除
 minema.config.disableCulling.tooltip=強制遊戲渲染荧幕外區塊，匯出VR時會自動啟用。
+
+minema.config.shaderpack=錄製用光影
+minema.config.shaderpack.tooltip=當錄製時自動切換至此光影。
 
 # vr video
 minema.config.enableVR=匯出全景視頻

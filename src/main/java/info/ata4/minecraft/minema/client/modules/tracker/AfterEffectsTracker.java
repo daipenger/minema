@@ -132,11 +132,13 @@ public class AfterEffectsTracker extends BaseTracker {
 	}
 	
 	@Override
-	public void doTrack(String name, boolean isCamera) {
+	public void track(String name) {
 		if (!this.isEnabled() || !TimerModifier.canRecord() || !tracking)
 			return;
 		
 		updateMVP();
+		
+		boolean isCamera = name == null;
 		
 		if (isCamera)
 			camera.set(modelview);
@@ -185,6 +187,35 @@ public class AfterEffectsTracker extends BaseTracker {
 		double Rx;
 		double Ry;
 		double Rz;
+		boolean inv = false;
+		
+		if (!isCamera) {
+			Matrix4d matInvSy = new Matrix4d(
+					1, 0, 0, 0,
+					0, -1, 0, 0,
+					0, 0, 1, 0,
+					0, 0, 0, 1
+					);
+			Vector4d matX = new Vector4d();
+			mat.getColumn(0, matX);
+			Vector4d matY = new Vector4d();
+			mat.getColumn(1, matY);
+			Vector4d matZ = new Vector4d();
+			mat.getColumn(2, matZ);
+			Vector3d vx = new Vector3d(matX.x, matX.y, matX.z);
+			Vector3d vy = new Vector3d(matY.x, matY.y, matY.z);
+			Vector3d vz = new Vector3d(matZ.x, matZ.y, matZ.z);
+			
+			Vector3d crossY = new Vector3d();
+			Vector3d originalY = new Vector3d();
+			originalY.normalize(vy);
+			crossY.cross(vz, vx);
+			crossY.normalize();
+			if (crossY.dot(originalY) < 0) {
+				inv = true;
+				mat.mul(matInvSy);
+			}
+		}
 		
 		Matrix4d rot = new Matrix4d();
 		Vector4d test = new Vector4d(1, 0, 0, 1);
@@ -229,13 +260,16 @@ public class AfterEffectsTracker extends BaseTracker {
 		if (isCamera)
 			orientation.put(frame, new Vector3d(-Rx, -Ry, 180 - Rz));
 		else
-			orientation.put(frame, new Vector3d(180 - Rx, Ry, Rz));
+			orientation.put(frame, new Vector3d(
+					inv ? (Rx - 180) : (180 - Rx), 
+					Ry, 
+					inv ? 180 - Rz : Rz));
 	}
 	
 	private void afterCamera() {
 		frame++;
 		tracking = true;
-		doTrack(null, true);
+		track(null);
 	}
 	
 	private void onRenderEnd() {

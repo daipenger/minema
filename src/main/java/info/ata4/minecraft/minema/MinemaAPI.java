@@ -2,6 +2,7 @@ package info.ata4.minecraft.minema;
 
 import info.ata4.minecraft.minema.client.engine.FixedTimer;
 import info.ata4.minecraft.minema.client.modules.modifiers.TimerModifier;
+import info.ata4.minecraft.minema.client.modules.tracker.BaseTracker;
 import info.ata4.minecraft.minema.client.util.MinemaException;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -73,6 +74,16 @@ public class MinemaAPI {
 		}
 
 		return e.getMessage();
+	}
+	
+	/**
+	 * Track coordinate information using current ModelViewMatrix
+	 * @param name The name of tracker, must not be empty
+	 */
+	public static void doTrack(String name) {
+		if (name == null || name.isEmpty())
+			return;
+		BaseTracker.doTrack(name);
 	}
 
 }

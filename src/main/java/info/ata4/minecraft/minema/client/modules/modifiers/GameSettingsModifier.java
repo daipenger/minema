@@ -9,7 +9,12 @@
  */
 package info.ata4.minecraft.minema.client.modules.modifiers;
 
+import java.io.File;
+
+import info.ata4.minecraft.minema.Minema;
+import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import info.ata4.minecraft.minema.client.modules.CaptureModule;
+import info.ata4.minecraft.minema.util.reflection.PrivateAccessor;
 import net.minecraft.client.settings.GameSettings;
 
 /**
@@ -21,6 +26,7 @@ public class GameSettingsModifier extends CaptureModule {
 	private int framerateLimit;
 	private boolean vSync;
 	private boolean pauseOnLostFocus;
+	private String lastShaderPack;
 
 	@Override
 	protected void doEnable() throws Exception {
@@ -37,6 +43,19 @@ public class GameSettingsModifier extends CaptureModule {
 		// don't pause when losing focus
 		pauseOnLostFocus = gs.pauseOnLostFocus;
 		gs.pauseOnLostFocus = false;
+		
+		if (PrivateAccessor.isShaderPackSupported()) {
+			MinemaConfig cfg = Minema.instance.getConfig();
+			String pack = cfg.shaderpack.get();
+			if (pack != null && !pack.isEmpty()) {
+				File packDir = PrivateAccessor.getShaderPacksDir();
+				if (packDir != null && new File(packDir, pack).exists() || pack.equals("OFF") || pack.equals("(internal)")) {
+					lastShaderPack = PrivateAccessor.getCurrentShaderName();
+					PrivateAccessor.setShaderPack(pack);
+					PrivateAccessor.uninitShaderPack();
+				}
+			}
+		}
 	}
 
 	@Override
@@ -46,6 +65,12 @@ public class GameSettingsModifier extends CaptureModule {
 		gs.limitFramerate = framerateLimit;
 		gs.pauseOnLostFocus = pauseOnLostFocus;
 		gs.enableVsync = vSync;
+		
+		if (lastShaderPack != null) {
+			PrivateAccessor.setShaderPack(lastShaderPack);
+			PrivateAccessor.uninitShaderPack();
+			lastShaderPack = null;
+		}
 	}
 
 	@Override

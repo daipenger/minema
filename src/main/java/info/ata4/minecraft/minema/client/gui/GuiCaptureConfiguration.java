@@ -7,6 +7,7 @@ import info.ata4.minecraft.minema.client.config.MinemaConfig;
 import info.ata4.minecraft.minema.client.modules.video.VideoHandler;
 import info.ata4.minecraft.minema.util.config.ConfigDouble;
 import info.ata4.minecraft.minema.util.config.ConfigInteger;
+import info.ata4.minecraft.minema.util.reflection.PrivateAccessor;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -35,6 +36,9 @@ public class GuiCaptureConfiguration extends GuiScreen {
     public GuiButton showConfig;
     public GuiButton showRecordings;
     public GuiButton record;
+    
+    public GuiButton selectShader;
+    public GuiButton clearShader;
 
     private boolean movieExists;
 
@@ -67,10 +71,18 @@ public class GuiCaptureConfiguration extends GuiScreen {
         this.showConfig = new GuiButton(5, x, y, 95, 20, I18n.format("fml.menu.modoptions"));
         this.showRecordings = new GuiButton(6, x + 100, y, 100, 20, I18n.format("minema.gui.movies_folder"));
         this.record = new GuiButton(7, x + 205, y, 95, 20, I18n.format("minema.gui.record"));
-
+        
         this.buttonList.add(this.showConfig);
         this.buttonList.add(this.showRecordings);
         this.buttonList.add(this.record);
+
+        if (PrivateAccessor.isShaderPackSupported()) {
+            this.selectShader = new GuiButton(8, x, y - 25, 145, 20, I18n.format("minema.gui.select_shaderpack"));
+            this.clearShader = new GuiButton(9, x + 155, y - 25, 145, 20, I18n.format("minema.gui.clear_shaderpack"));
+            
+            this.buttonList.add(this.selectShader);
+            this.buttonList.add(this.clearShader);
+        }
 
         /* Fill data */
         MinemaConfig cfg = Minema.instance.getConfig();
@@ -80,6 +92,9 @@ public class GuiCaptureConfiguration extends GuiScreen {
         this.frameRate.setText(cfg.frameRate.get().toString());
         this.frameLimit.setText(cfg.frameLimit.get().toString());
         this.engineSpeed.setText(cfg.engineSpeed.get().toString());
+        
+        if (this.clearShader != null && cfg.shaderpack.get().isEmpty())
+        	this.clearShader.enabled = false;
     }
 
     public void saveConfigValues() {
@@ -120,6 +135,12 @@ public class GuiCaptureConfiguration extends GuiScreen {
 
             if (this.mc.currentScreen == null)
                 this.mc.setIngameFocus();
+        } else if (button == this.selectShader) {
+        	Minema.instance.getConfig().shaderpack.set(PrivateAccessor.getCurrentShaderName());
+        	this.clearShader.enabled = true;
+        } else if (button == this.clearShader) {
+        	Minema.instance.getConfig().shaderpack.set("");
+        	this.clearShader.enabled = false;
         }
     }
 

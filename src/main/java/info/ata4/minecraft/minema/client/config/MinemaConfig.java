@@ -79,7 +79,7 @@ public class MinemaConfig {
 	public final ConfigBoolean preloadChunks = new ConfigBoolean(true);
 	public final ConfigBoolean forcePreloadChunks = new ConfigBoolean(false);
 	public final ConfigBoolean disableCulling = new ConfigBoolean(false);
-//	public final ConfigInteger networkDelay = new ConfigInteger(20, 0, Integer.MAX_VALUE);
+	public final ConfigString shaderpack = new ConfigString("");
 
 	public final ConfigBoolean vr = new ConfigBoolean(false);
 	public final ConfigBoolean vrMetadata = new ConfigBoolean(true);
@@ -132,6 +132,7 @@ public class MinemaConfig {
 		preloadChunks.link(cfg, ENGINE_CATEGORY, "preloadChunks", LANG_KEY);
 		forcePreloadChunks.link(cfg, ENGINE_CATEGORY, "forcePreloadChunks", LANG_KEY);
 		disableCulling.link(cfg, ENGINE_CATEGORY, "disableCulling", LANG_KEY);
+		shaderpack.link(cfg, ENGINE_CATEGORY, "shaderpack", LANG_KEY);
 		
 		vr.link(cfg, VR_CATEGORY, "enableVR", LANG_KEY);
 		vrMetadata.link(cfg, VR_CATEGORY, "injectMetadata", LANG_KEY);
