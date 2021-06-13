@@ -24,8 +24,8 @@ minema.error.vr_broken=Failed to write VR video metadata to file '%s', file may 
 minema.gui.title=Video recording configuration
 minema.gui.movies_folder=Movies Folder
 minema.gui.record=Record...
-minema.gui.select_shaderpack=Set current shaderpack for recording
-minema.gui.clear_shaderpack=Clear shaderpack for recording
+minema.gui.shaderpack.select=Set current shaderpack for recording
+minema.gui.shaderpack.clear=Clear shaderpack for recording
 
 minema.gui.name=Output name
 minema.gui.width=Width
@@ -35,6 +35,7 @@ minema.gui.limit=Frame limit
 minema.gui.speed=Engine speed
 minema.gui.speed.tooltip=Ex. 1 = normal, 2 (2/1) = 2x faster, 0.5 (1/2) = 2x slower
 minema.gui.file_exists=A file with such name exists already, pick another...
+minema.gui.shaderpack.selected=Selected shaderpack "%s"
 
 # keys
 key.categories.minema=Minema

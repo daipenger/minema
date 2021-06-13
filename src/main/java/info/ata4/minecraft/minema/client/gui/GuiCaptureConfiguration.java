@@ -77,8 +77,8 @@ public class GuiCaptureConfiguration extends GuiScreen {
         this.buttonList.add(this.record);
 
         if (PrivateAccessor.isShaderPackSupported()) {
-            this.selectShader = new GuiButton(8, x, y - 25, 145, 20, I18n.format("minema.gui.select_shaderpack"));
-            this.clearShader = new GuiButton(9, x + 155, y - 25, 145, 20, I18n.format("minema.gui.clear_shaderpack"));
+            this.selectShader = new GuiButton(8, x + 40, y - 50, 220, 20, I18n.format("minema.gui.shaderpack.select"));
+            this.clearShader = new GuiButton(9, x + 40, y - 25, 220, 20, I18n.format("minema.gui.shaderpack.clear"));
             
             this.buttonList.add(this.selectShader);
             this.buttonList.add(this.clearShader);
@@ -231,6 +231,13 @@ public class GuiCaptureConfiguration extends GuiScreen {
         if (this.movieExists)
             this.fontRenderer.drawStringWithShadow(I18n.format("minema.gui.file_exists"), this.name.x, this.name.y + 22, 0xff3355);
 
+        String shaderpack = Minema.instance.getConfig().shaderpack.get();
+        if (!shaderpack.isEmpty()) {
+        	String current = I18n.format("minema.gui.shaderpack.selected", shaderpack);
+        	int x = (this.width - this.fontRenderer.getStringWidth(current)) / 2;
+        	this.fontRenderer.drawStringWithShadow(current, x, this.height - this.fontRenderer.FONT_HEIGHT - 85, 0xffffff);
+        }
+        
         this.name.drawTextBox();
         this.videoWidth.drawTextBox();
         this.videoHeight.drawTextBox();

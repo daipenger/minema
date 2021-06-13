@@ -24,8 +24,8 @@ minema.error.vr_broken=視頻 '%s' 寫入VR視頻中繼資料失敗，檔案可�
 minema.gui.title=視頻錄制配置
 minema.gui.movies_folder=影片文件夾
 minema.gui.record=錄制...
-minema.gui.select_shaderpack=設定當前光影為錄製用光影
-minema.gui.clear_shaderpack=清除錄製用光影
+minema.gui.shaderpack.select=設定當前光影為錄製用光影
+minema.gui.shaderpack.clear=清除錄製用光影
 
 minema.gui.name=輸出文件名
 minema.gui.width=寬度
@@ -35,6 +35,7 @@ minema.gui.limit=幀數上限
 minema.gui.speed=引擎速率
 minema.gui.speed.tooltip=例: 1 = 正常，2 (2/1) = 2x 更快，0.5 (1/2) = 2x 更慢
 minema.gui.file_exists=已存在相同名稱的文件，請選擇其他名稱...
+minema.gui.shaderpack.selected=已選擇光影 “%s”
 
 # keys
 key.categories.minema=Minema

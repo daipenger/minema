@@ -24,8 +24,8 @@ minema.error.vr_broken=视频 '%s' 写入VR视频元数据失败，文件可能�
 minema.gui.title=视频录制配置
 minema.gui.movies_folder=影片文件夹
 minema.gui.record=录制...
-minema.gui.select_shaderpack=设置当前光影为录制用光影
-minema.gui.clear_shaderpack=清除录制用光影
+minema.gui.shaderpack.select=设置当前光影为录制用光影
+minema.gui.shaderpack.clear=清除录制用光影
 
 minema.gui.name=输出文件名
 minema.gui.width=宽度
@@ -35,6 +35,7 @@ minema.gui.limit=帧数上限
 minema.gui.speed=引擎速率
 minema.gui.speed.tooltip=例: 1 = 正常，2 (2/1) = 2x 更快，0.5 (1/2) = 2x 更慢
 minema.gui.file_exists=已存在相同名称的文件，请选择其他名称...
+minema.gui.shaderpack.selected=已选择光影 “%s”
 
 # keys
 key.categories.minema=Minema
