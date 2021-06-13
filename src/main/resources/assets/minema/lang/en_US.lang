@@ -147,9 +147,10 @@ minema.config.shaderpack.tooltip=Automatically switch to this shaderpack when re
 
 # vr video
 minema.config.enableVR=Export Panoramic Video
+minema.config.enableVR.tooltip=Capture the video as 360 (Equirectangular Panoramic Video) video.
 
 minema.config.injectMetadata=Inject Spherical Metadata
-minema.config.objectMetadata.tooltip=Inject spherical metadata to MP4 format panoramic video in order to facilitate the player and video website to identify the video format, turn off this option if the exported panoramic video is always broken.
+minema.config.injectMetadata.tooltip=Inject spherical metadata to MP4 format panoramic video in order to facilitate the player and video website to identify the video format, turn off this option if the exported panoramic video is always broken.
 
 minema.config.vrSSRSupport=Screen Space Effects Compatible
 minema.config.vrSSRSupport.tooltip=Ensure proper rendering of screen space effects by reserving upper and lower screen space, but it will significantly degrade the image quality.
