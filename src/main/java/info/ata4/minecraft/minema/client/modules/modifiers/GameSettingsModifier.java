@@ -50,9 +50,12 @@ public class GameSettingsModifier extends CaptureModule {
 			if (pack != null && !pack.isEmpty()) {
 				File packDir = PrivateAccessor.getShaderPacksDir();
 				if (packDir != null && new File(packDir, pack).exists() || pack.equals("OFF") || pack.equals("(internal)")) {
-					lastShaderPack = PrivateAccessor.getCurrentShaderName();
-					PrivateAccessor.setShaderPack(pack);
-					PrivateAccessor.uninitShaderPack();
+					String last = PrivateAccessor.getCurrentShaderName();
+					if (!pack.equals(last)) {
+					    lastShaderPack = last;
+	                    PrivateAccessor.setShaderPack(pack);
+	                    PrivateAccessor.uninitShaderPack();
+					}
 				}
 			}
 		}

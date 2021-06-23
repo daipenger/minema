@@ -144,9 +144,10 @@ minema.config.shaderpack.tooltip=當錄製時自動切換至此光影。
 
 # vr video
 minema.config.enableVR=匯出全景視頻
+minema.config.enableVR.tooltip=將當前視頻匯出為360度等距柱狀投影全景視頻。
 
 minema.config.injectMetadata=寫入全景視頻中繼資料
 minema.config.injectMetadata.tooltip=向 MP4 格式的全景視頻寫入中繼資料以便於播放機與視頻網站識別視頻格式，如果匯出的全景視頻總是損壞，請關閉此功能。
 
-minema.config.vrSSRSupport=屏幕空间特效兼容
-minema.config.vrSSRSupport.tooltip=通过预留上下屏幕空间来保证屏幕空间特效的正确渲染，但是会显著降低画质。
+minema.config.vrSSRSupport=荧幕空間特效相容
+minema.config.vrSSRSupport.tooltip=通過預留上下荧幕空間來保證荧幕空間特效的正確渲染，但是會顯著降低畫質。

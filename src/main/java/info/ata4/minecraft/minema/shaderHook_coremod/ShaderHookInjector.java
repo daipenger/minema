@@ -448,7 +448,7 @@ public final class ShaderHookInjector implements IClassTransformer {
 				list.add(label);
 				list.add(new FrameNode(Opcodes.F_SAME, 0, null, 0, null));
 
-				method.instructions.insert(method.instructions.getFirst(), list);
+				method.instructions.insertBefore(method.instructions.getFirst(), list);
 			}
 		}
 	}

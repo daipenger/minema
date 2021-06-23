@@ -144,6 +144,7 @@ minema.config.shaderpack.tooltip=当录制时自动切换至此光影。
 
 # vr video
 minema.config.enableVR=导出全景视频
+minema.config.enableVR.tooltip=将当前视频导出为360度等距柱状投影全景视频。
 
 minema.config.injectMetadata=写入全景视频元数据
 minema.config.injectMetadata.tooltip=向 MP4 格式的全景视频写入元数据以便于播放器与视频网站识别视频格式，如果导出的全景视频总是损坏，请关闭此功能。

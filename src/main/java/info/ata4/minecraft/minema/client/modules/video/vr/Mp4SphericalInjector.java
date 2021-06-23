@@ -44,6 +44,8 @@ public class Mp4SphericalInjector {
 	private static long findBox(RandomAccessFile fp, String box) throws IOException, InjectFailedException {
 		while (fp.getFilePointer() < fp.length()) {
 			long size = readUIntBE(fp);
+			if (size < 8)
+			    throw new InjectFailedException("Invaild mp4.");
 			String tag = readBoxTag(fp);
 			if (tag.equals(box))
 				return fp.getFilePointer() - 8;

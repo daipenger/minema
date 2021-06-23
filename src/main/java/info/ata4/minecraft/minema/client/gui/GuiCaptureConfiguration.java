@@ -231,11 +231,13 @@ public class GuiCaptureConfiguration extends GuiScreen {
         if (this.movieExists)
             this.fontRenderer.drawStringWithShadow(I18n.format("minema.gui.file_exists"), this.name.x, this.name.y + 22, 0xff3355);
 
-        String shaderpack = Minema.instance.getConfig().shaderpack.get();
-        if (!shaderpack.isEmpty()) {
-        	String current = I18n.format("minema.gui.shaderpack.selected", shaderpack);
-        	int x = (this.width - this.fontRenderer.getStringWidth(current)) / 2;
-        	this.fontRenderer.drawStringWithShadow(current, x, this.height - this.fontRenderer.FONT_HEIGHT - 85, 0xffffff);
+        if (PrivateAccessor.isShaderPackSupported()) {
+            String shaderpack = Minema.instance.getConfig().shaderpack.get();
+            if (!shaderpack.isEmpty()) {
+                String current = I18n.format("minema.gui.shaderpack.selected", shaderpack);
+                int x = (this.width - this.fontRenderer.getStringWidth(current)) / 2;
+                this.fontRenderer.drawStringWithShadow(current, x, this.height - this.fontRenderer.FONT_HEIGHT - 85, 0xffffff);
+            }
         }
         
         this.name.drawTextBox();

@@ -6,6 +6,7 @@ import info.ata4.minecraft.minema.Minema;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
 @IFMLLoadingPlugin.MCVersion(value = Minema.MCVERSION)
+@IFMLLoadingPlugin.SortingIndex(1000)
 public final class ShaderHookLoader implements IFMLLoadingPlugin {
 
 	@Override
