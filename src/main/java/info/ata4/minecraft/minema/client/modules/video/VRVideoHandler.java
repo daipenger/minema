@@ -294,7 +294,13 @@ public class VRVideoHandler extends CaptureModule {
 	}
 
 	private void onRenderMid(MidRenderEvent e) throws Exception {
-		checkDimensions();
+	    try {
+            checkDimensions();
+        } catch (IllegalStateException ex) {
+            if (PrivateAccessor.isShaderPackLoaded())
+                return;
+            throw ex;
+        }
 
 		if (!recordGui && !PrivateAccessor.isShaderPackLoaded()) {
 			if (exportColor())

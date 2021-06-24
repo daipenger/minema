@@ -139,7 +139,13 @@ public class VideoHandler extends CaptureModule {
 	}
 
 	private void onRenderMid(MidRenderEvent e) throws Exception {
-		checkDimensions();
+	    try {
+	        checkDimensions();
+	    } catch (IllegalStateException ex) {
+	        if (PrivateAccessor.isShaderPackLoaded())
+	            return;
+	        throw ex;
+	    }
 		
 		if (!TimerModifier.canRecord())
 			return;
